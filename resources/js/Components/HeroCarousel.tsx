@@ -3,20 +3,20 @@ import { Link } from '@inertiajs/react'
 
 const slides = [
     {
-        image:       'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=1920&q=80',
+        image:       'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=1920&q=80',
         badge:       'Tanzania\'s Premier Law Firm',
         title:       'Excellence in Legal Representation',
         description: 'Trill & Associates Advocates has been delivering exceptional legal services from the 18th Floor of Rita Tower, Dar-es-Salaam — serving clients across Tanzania and around the globe.',
         cta:         { label: 'Free Consultation', href: '/contact' },
-        accent:      'from-navy-950/80 via-navy-900/60 to-transparent',
+        accent:      'from-navy-950/85 via-navy-900/65 to-transparent',
     },
     {
-        image:       'https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=1920&q=80',
+        image:       'https://images.unsplash.com/photo-1556157382-97eda2f9aa05?auto=format&fit=crop&w=1920&q=80',
         badge:       'Corporate & Commercial Law',
         title:       'Powering Businesses Across East Africa',
         description: 'From incorporation and governance to complex mergers and acquisitions — our corporate team provides the legal backbone your business needs to thrive in competitive markets.',
         cta:         { label: 'Learn More', href: '/about' },
-        accent:      'from-navy-950/85 via-navy-900/50 to-transparent',
+        accent:      'from-navy-950/85 via-navy-900/65 to-transparent',
     },
     {
         image:       'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=1920&q=80',
@@ -100,6 +100,8 @@ export default function HeroCarousel() {
                     {/* Gradient overlay */}
                     <div className={`absolute inset-0 bg-gradient-to-r ${slide.accent}`} />
                     <div className="absolute inset-0 bg-gradient-to-t from-navy-950/70 via-transparent to-navy-950/30" />
+                    {/* Flat dark layer — ensures text is always readable across all images */}
+                    <div className="absolute inset-0 bg-navy-950/45" />
 
                     {/* Vertical gold line */}
                     <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-transparent via-gold-500 to-transparent opacity-70 z-20" />

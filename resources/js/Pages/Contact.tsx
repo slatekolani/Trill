@@ -1,4 +1,4 @@
-import { Head, Link, useForm } from '@inertiajs/react'
+import { Head, Link, useForm, usePage } from '@inertiajs/react'
 import { FormEvent } from 'react'
 import MainLayout from '@/Layouts/MainLayout'
 
@@ -68,7 +68,8 @@ const practiceAreas = [
 ]
 
 export default function Contact() {
-    const { data, setData, post, processing, errors, wasSuccessful, reset } = useForm({
+    const { flash } = usePage<{ flash: { success?: string; error?: string } }>().props
+    const { data, setData, post, processing, errors } = useForm({
         name:     '',
         email:    '',
         phone:    '',
@@ -79,10 +80,7 @@ export default function Contact() {
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault()
-        // For a real implementation, you'd post to a controller.
-        // For now, we just simulate success by resetting.
-        reset()
-        alert('Thank you for your message! Our team will be in touch within 24 hours.')
+        post('/contact')
     }
 
     return (
@@ -97,6 +95,7 @@ export default function Contact() {
                     className="absolute inset-0 w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-r from-navy-950/97 via-navy-950/90 to-navy-900/70" />
+                <div className="absolute inset-0 bg-navy-950/50" />
                 <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-transparent via-gold-500 to-transparent opacity-70" />
 
                 <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20 w-full">
@@ -169,6 +168,18 @@ export default function Contact() {
                                     <h2 className="font-serif text-navy-950 text-3xl font-bold">Send Us a Message</h2>
                                     <span className="block w-12 h-0.5 bg-gold-500 mt-3" />
                                 </div>
+
+                                {flash?.success && (
+                                    <div className="mb-6 flex items-start gap-3 bg-green-50 border border-green-200 rounded-sm p-4">
+                                        <svg className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        <div>
+                                            <p className="text-green-800 font-semibold text-sm">Message Sent!</p>
+                                            <p className="text-green-700 text-sm mt-0.5">{flash.success}</p>
+                                        </div>
+                                    </div>
+                                )}
 
                                 <form onSubmit={handleSubmit} className="space-y-5">
                                     {/* Name + Email */}

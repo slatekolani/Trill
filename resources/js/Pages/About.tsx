@@ -100,6 +100,7 @@ export default function About() {
                     className="absolute inset-0 w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-r from-navy-950/95 via-navy-950/80 to-navy-900/50" />
+                <div className="absolute inset-0 bg-navy-950/50" />
                 <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-transparent via-gold-500 to-transparent opacity-70" />
 
                 <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20 w-full">
@@ -351,8 +352,8 @@ export default function About() {
                         Let our experienced team of advocates guide you through your legal challenges with confidence and care.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <Link href="/contact" className="inline-flex items-center gap-2 bg-navy-950 hover:bg-navy-900 text-white font-semibold px-10 py-4 rounded-sm transition-all duration-300 tracking-wide uppercase text-sm">
-                            Contact Us
+                        <Link href="/book-consultation" className="inline-flex items-center gap-2 bg-navy-950 hover:bg-navy-900 text-white font-semibold px-10 py-4 rounded-sm transition-all duration-300 tracking-wide uppercase text-sm">
+                            Book a Consultation
                         </Link>
                         <a href="tel:+255738600670" className="inline-flex items-center gap-2 border-2 border-navy-950 text-navy-950 hover:bg-navy-950 hover:text-white font-semibold px-10 py-4 rounded-sm transition-all duration-300 tracking-wide uppercase text-sm">
                             Call: +255 738 600 670
