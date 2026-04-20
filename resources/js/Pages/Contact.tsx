@@ -1,4 +1,5 @@
-import { Head, Link, useForm, usePage } from '@inertiajs/react'
+import { Link, useForm, usePage } from '@inertiajs/react'
+import Seo from '@/Components/Seo'
 import { FormEvent } from 'react'
 import MainLayout from '@/Layouts/MainLayout'
 
@@ -85,7 +86,10 @@ export default function Contact() {
 
     return (
         <MainLayout>
-            <Head title="Contact Us" />
+            <Seo
+                title="Contact Us – Trill & Associates Advocates"
+                description="Contact Trill & Associates Advocates in Dar-es-Salaam, Tanzania. Reach our legal team for consultations, inquiries, and expert legal assistance across all practice areas."
+            />
 
             {/* ── PAGE HERO ── */}
             <section className="relative min-h-[60vh] flex items-center overflow-hidden">

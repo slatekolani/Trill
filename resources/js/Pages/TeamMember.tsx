@@ -1,5 +1,6 @@
-import { Head, Link } from '@inertiajs/react'
+import { Link, usePage } from '@inertiajs/react'
 import MainLayout from '@/Layouts/MainLayout'
+import Seo from '@/Components/Seo'
 
 interface Education { degree: string; institution: string }
 
@@ -20,9 +21,37 @@ interface Member {
 interface Props { member: Member }
 
 export default function TeamMemberPage({ member }: Props) {
+    const { appUrl, currentUrl } = usePage<{ appUrl: string; currentUrl: string }>().props
+
+    const personSchema: Record<string, unknown> = {
+        '@context':   'https://schema.org',
+        '@type':      'Person',
+        'name':       member.name,
+        'jobTitle':   member.role,
+        'description': member.bio,
+        'url':        currentUrl,
+        'worksFor': {
+            '@type': 'LegalService',
+            '@id':   `${appUrl}/#organization`,
+            'name':  'Trill & Associates Advocates',
+        },
+        'knowsLanguage': member.languages,
+        'knowsAbout':    member.practice_areas,
+    }
+    if (member.avatar_url) personSchema['image'] = member.avatar_url
+    if (member.email) personSchema['email'] = member.email
+
+    const desc = member.bio.length > 160 ? member.bio.slice(0, 157) + '...' : member.bio
+
     return (
         <MainLayout>
-            <Head title={`${member.name} — Trill & Associates Advocates`} />
+            <Seo
+                title={`${member.name} – Trill & Associates Advocates`}
+                description={desc}
+                type="profile"
+                image={member.avatar_url ?? undefined}
+                jsonLd={personSchema}
+            />
 
             {/* ── HERO ── */}
             <section className="relative bg-navy-950 pt-36 pb-20 overflow-hidden">

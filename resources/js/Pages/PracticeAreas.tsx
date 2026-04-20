@@ -1,5 +1,6 @@
-import { Head, Link } from '@inertiajs/react'
+import { Link } from '@inertiajs/react'
 import MainLayout from '@/Layouts/MainLayout'
+import Seo from '@/Components/Seo'
 
 const practiceAreas = [
     {
@@ -228,7 +229,10 @@ const sectors = [
 export default function PracticeAreas() {
     return (
         <MainLayout>
-            <Head title="Practice Areas — Trill &amp; Associates Advocates" />
+            <Seo
+                title="Practice Areas – Trill & Associates Advocates"
+                description="Explore the full range of legal services at Trill & Associates Advocates — corporate law, dispute resolution, real estate, intellectual property, employment law, and more in Tanzania."
+            />
 
             {/* ── PAGE HERO ── */}
             <section className="relative min-h-[60vh] flex items-center overflow-hidden">

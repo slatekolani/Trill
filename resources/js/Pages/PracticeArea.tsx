@@ -1,5 +1,6 @@
-import { Head, Link } from '@inertiajs/react'
+import { Link, usePage } from '@inertiajs/react'
 import MainLayout from '@/Layouts/MainLayout'
+import Seo from '@/Components/Seo'
 
 interface Props {
     slug: string
@@ -187,10 +188,40 @@ const defaultArea = (slug: string) => ({
 
 export default function PracticeArea({ slug }: Props) {
     const area = areaData[slug] ?? defaultArea(slug)
+    const { appUrl, currentUrl } = usePage<{ appUrl: string; currentUrl: string }>().props
+
+    const serviceSchema = {
+        '@context':    'https://schema.org',
+        '@type':       'Service',
+        'name':        area.title,
+        'description': area.intro,
+        'url':         currentUrl,
+        'provider': {
+            '@type': 'LegalService',
+            '@id':   `${appUrl}/#organization`,
+            'name':  'Trill & Associates Advocates',
+        },
+        'areaServed': 'Tanzania',
+    }
+
+    const faqSchema = area.clientNeeds.length > 0 ? {
+        '@context':   'https://schema.org',
+        '@type':      'FAQPage',
+        'mainEntity': area.clientNeeds.map(cn => ({
+            '@type':          'Question',
+            'name':           cn.scenario,
+            'acceptedAnswer': { '@type': 'Answer', 'text': cn.answer },
+        })),
+    } : null
 
     return (
         <MainLayout>
-            <Head title={`${area.title} — Trill & Associates Advocates`} />
+            <Seo
+                title={`${area.title} – Trill & Associates Advocates`}
+                description={area.intro.length > 160 ? area.intro.slice(0, 157) + '...' : area.intro}
+                image={area.heroImg}
+                jsonLd={faqSchema ? [serviceSchema, faqSchema] : serviceSchema}
+            />
 
             {/* ── HERO ── */}
             <section className="relative min-h-[60vh] flex items-end overflow-hidden">

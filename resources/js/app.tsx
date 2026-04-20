@@ -3,7 +3,7 @@ import { createElement } from 'react'
 import { createRoot } from 'react-dom/client'
 
 createInertiaApp({
-    title: (title) => title ? `${title} – Trill & Associates Advocates` : 'Trill & Associates Advocates',
+    title: (title) => title || 'Trill & Associates Advocates',
     resolve: (name) => {
         const pages = import.meta.glob('./Pages/**/*.tsx', { eager: true }) as Record<string, { default: React.ComponentType }>
         return pages[`./Pages/${name}.tsx`]

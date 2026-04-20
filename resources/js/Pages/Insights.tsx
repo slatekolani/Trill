@@ -1,5 +1,6 @@
-import { Head, Link } from '@inertiajs/react'
+import { Link } from '@inertiajs/react'
 import MainLayout from '@/Layouts/MainLayout'
+import Seo from '@/Components/Seo'
 
 interface Article {
     id:          number
@@ -26,7 +27,10 @@ export default function Insights({ articles, categories }: Props) {
 
     return (
         <MainLayout>
-            <Head title="Legal Insights &amp; Publications — Trill &amp; Associates Advocates" />
+            <Seo
+                title="Legal Insights & Publications – Trill & Associates Advocates"
+                description="Read legal insights, analysis, and publications from the advocates at Trill & Associates. Stay informed on Tanzania law, business regulations, and legal developments."
+            />
 
             {/* ── PAGE HERO ── */}
             <section className="relative min-h-[55vh] flex items-center overflow-hidden">

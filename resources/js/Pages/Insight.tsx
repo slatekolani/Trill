@@ -1,5 +1,6 @@
-import { Head, Link } from '@inertiajs/react'
+import { Link, usePage } from '@inertiajs/react'
 import MainLayout from '@/Layouts/MainLayout'
+import Seo from '@/Components/Seo'
 
 interface RelatedArticle {
     title:    string
@@ -28,9 +29,43 @@ interface Props {
 const fallbackImg = 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=1920&q=80'
 
 export default function Insight({ article }: Props) {
+    const { appUrl, currentUrl } = usePage<{ appUrl: string; currentUrl: string }>().props
+
+    const firstParagraph = article.content[0] ?? ''
+    const desc = firstParagraph.length > 160
+        ? firstParagraph.slice(0, 157) + '...'
+        : firstParagraph || article.title
+
+    const articleSchema = {
+        '@context':         'https://schema.org',
+        '@type':            'Article',
+        'headline':         article.title,
+        'description':      desc,
+        'url':              currentUrl,
+        'datePublished':    article.date,
+        'author': {
+            '@type': 'Person',
+            'name':  article.author,
+        },
+        'publisher': {
+            '@type': 'Organization',
+            '@id':   `${appUrl}/#organization`,
+            'name':  'Trill & Associates Advocates',
+            'logo':  { '@type': 'ImageObject', 'url': `${appUrl}/Logo/trill_logo.png` },
+        },
+        'image':            article.hero_img ?? fallbackImg,
+        'articleSection':   article.category,
+    }
+
     return (
         <MainLayout>
-            <Head title={`${article.title} — Trill & Associates Advocates`} />
+            <Seo
+                title={`${article.title} – Trill & Associates Advocates`}
+                description={desc}
+                type="article"
+                image={article.hero_img ?? fallbackImg}
+                jsonLd={articleSchema}
+            />
 
             {/* ── HERO ── */}
             <section className="relative min-h-[55vh] flex items-end overflow-hidden">

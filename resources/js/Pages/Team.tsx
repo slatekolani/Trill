@@ -1,5 +1,6 @@
-import { Head, Link } from '@inertiajs/react'
+import { Link } from '@inertiajs/react'
 import MainLayout from '@/Layouts/MainLayout'
+import Seo from '@/Components/Seo'
 
 interface Education { degree: string; institution: string }
 
@@ -37,7 +38,10 @@ const values = [
 export default function Team({ members }: Props) {
     return (
         <MainLayout>
-            <Head title="Our Team — Trill &amp; Associates Advocates" />
+            <Seo
+                title="Our Team – Trill & Associates Advocates"
+                description="Meet the experienced legal professionals at Trill & Associates Advocates. Our advocates bring deep expertise across all major practice areas in Tanzania and East Africa."
+            />
 
             {/* ── PAGE HERO ── */}
             <section className="relative min-h-[65vh] flex items-center overflow-hidden">

@@ -1,4 +1,5 @@
-import { Head, Link, useForm, usePage } from '@inertiajs/react'
+import { Link, useForm, usePage } from '@inertiajs/react'
+import Seo from '@/Components/Seo'
 import { FormEvent } from 'react'
 import MainLayout from '@/Layouts/MainLayout'
 
@@ -91,7 +92,10 @@ export default function BookConsultation() {
 
     return (
         <MainLayout>
-            <Head title="Book a Consultation — Trill &amp; Associates Advocates" />
+            <Seo
+                title="Book a Consultation – Trill & Associates Advocates"
+                description="Schedule a legal consultation with Trill & Associates Advocates. Book time with our experienced attorneys in Dar-es-Salaam, Tanzania for expert advice on your legal matter."
+            />
 
             {/* ── PAGE HERO ── */}
             <section className="relative min-h-[55vh] flex items-center overflow-hidden">

@@ -1,6 +1,7 @@
-import { Head, Link } from '@inertiajs/react'
+import { Link } from '@inertiajs/react'
 import MainLayout from '@/Layouts/MainLayout'
 import CountUp from '@/Components/CountUp'
+import Seo from '@/Components/Seo'
 
 const values = [
     {
@@ -90,7 +91,10 @@ const firmStats = [
 export default function About() {
     return (
         <MainLayout>
-            <Head title="About Us" />
+            <Seo
+                title="About Us – Trill & Associates Advocates"
+                description="Learn about Trill & Associates Advocates — our history, values, and the experienced legal team serving clients across Tanzania and East Africa from our Dar-es-Salaam office."
+            />
 
             {/* ── PAGE HERO — full photo with overlay ── */}
             <section className="relative min-h-[70vh] flex items-center overflow-hidden">

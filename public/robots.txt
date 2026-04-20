@@ -1,2 +1,30 @@
 User-agent: *
-Disallow:
+Allow: /
+
+# Block admin panel from indexing
+User-agent: *
+Disallow: /admin/
+
+# AI crawlers — explicitly allowed for GEO (Generative Engine Optimization)
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: GoogleOther
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+Sitemap: /sitemap.xml

@@ -1,5 +1,6 @@
-import { Head, Link } from '@inertiajs/react'
+import { Link } from '@inertiajs/react'
 import MainLayout from '@/Layouts/MainLayout'
+import Seo from '@/Components/Seo'
 
 const sectors = [
     {
@@ -63,7 +64,10 @@ const sectors = [
 export default function Sectors() {
     return (
         <MainLayout>
-            <Head title="Industry Sectors — Trill & Associates Advocates" />
+            <Seo
+                title="Industry Sectors – Trill & Associates Advocates"
+                description="Trill & Associates Advocates serves clients across key industry sectors in Tanzania — energy, startups & technology, banking, real estate, healthcare, and more."
+            />
 
             {/* ── HERO ── */}
             <section className="relative min-h-[45vh] flex items-end overflow-hidden bg-navy-950">

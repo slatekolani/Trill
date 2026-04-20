@@ -1,7 +1,8 @@
-import { Head, Link } from '@inertiajs/react'
+import { Link, usePage } from '@inertiajs/react'
 import MainLayout from '@/Layouts/MainLayout'
 import HeroCarousel from '@/Components/HeroCarousel'
 import CountUp from '@/Components/CountUp'
+import Seo from '@/Components/Seo'
 
 const practiceAreas = [
     {
@@ -195,9 +196,22 @@ interface Props {
 }
 
 export default function Home({ latestArticles, teamMembers }: Props) {
+    const { appUrl } = usePage<{ appUrl: string }>().props
+    const websiteSchema = {
+        '@context': 'https://schema.org',
+        '@type':    'WebSite',
+        '@id':      `${appUrl}/#website`,
+        'url':      appUrl,
+        'name':     'Trill & Associates Advocates',
+        'description': 'Tanzania\'s leading law firm providing expert legal services in corporate law, dispute resolution, real estate, IP, and employment law from Dar-es-Salaam.',
+    }
     return (
         <MainLayout>
-            <Head title="Home — Trill &amp; Associates Advocates" />
+            <Seo
+                title="Trill & Associates Advocates – Leading Law Firm in Tanzania"
+                description="Tanzania's leading law firm. Trill & Associates Advocates provides expert legal services in corporate law, dispute resolution, real estate, intellectual property, and employment law from Dar-es-Salaam."
+                jsonLd={websiteSchema}
+            />
 
             {/* ── HERO CAROUSEL ── */}
             <HeroCarousel />

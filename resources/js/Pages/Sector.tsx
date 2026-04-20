@@ -1,5 +1,6 @@
-import { Head, Link } from '@inertiajs/react'
+import { Link, usePage } from '@inertiajs/react'
 import MainLayout from '@/Layouts/MainLayout'
+import Seo from '@/Components/Seo'
 
 interface Props {
     slug: string
@@ -102,10 +103,30 @@ const defaultSector = (slug: string) => ({
 
 export default function Sector({ slug }: Props) {
     const sector = sectorData[slug] ?? defaultSector(slug)
+    const { appUrl, currentUrl } = usePage<{ appUrl: string; currentUrl: string }>().props
+
+    const sectorSchema = {
+        '@context':    'https://schema.org',
+        '@type':       'Service',
+        'name':        `${sector.title} Legal Services`,
+        'description': sector.intro,
+        'url':         currentUrl,
+        'provider': {
+            '@type': 'LegalService',
+            '@id':   `${appUrl}/#organization`,
+            'name':  'Trill & Associates Advocates',
+        },
+        'areaServed': 'Tanzania',
+    }
 
     return (
         <MainLayout>
-            <Head title={`${sector.title} — Trill & Associates Advocates`} />
+            <Seo
+                title={`${sector.title} – Trill & Associates Advocates`}
+                description={sector.intro.length > 160 ? sector.intro.slice(0, 157) + '...' : sector.intro}
+                image={sector.heroImg}
+                jsonLd={sectorSchema}
+            />
 
             {/* ── HERO ── */}
             <section className="relative min-h-[60vh] flex items-end overflow-hidden">
