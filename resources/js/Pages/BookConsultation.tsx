@@ -361,7 +361,7 @@ export default function BookConsultation() {
                             <div className="bg-white border border-gray-100 rounded-sm p-7">
                                 <h3 className="font-serif text-navy-950 text-lg font-semibold mb-4">Prefer to Call Directly?</h3>
                                 <a
-                                    href="tel:+255738600670"
+                                    href="tel:+255718694863"
                                     className="flex items-center gap-3 bg-gold-500 hover:bg-gold-600 text-white rounded-sm px-5 py-3.5 transition-colors mb-3"
                                 >
                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
@@ -369,7 +369,7 @@ export default function BookConsultation() {
                                     </svg>
                                     <div>
                                         <p className="text-xs text-white/70 font-normal leading-none mb-0.5">Call Us</p>
-                                        <p className="font-semibold text-sm">+255 738 600 670</p>
+                                        <p className="font-semibold text-sm">+255 718 694 863</p>
                                     </div>
                                 </a>
                                 <a

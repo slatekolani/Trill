@@ -76,7 +76,7 @@
     </div>
 
     <div class="cta">
-      <a href="tel:+255738600670">Need to reach us sooner? Call +255 738 600 670</a>
+      <a href="tel:+255718694863">Need to reach us sooner? Call +255 718 694 863</a>
     </div>
 
     <hr class="divider" />

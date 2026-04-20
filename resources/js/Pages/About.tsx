@@ -359,8 +359,8 @@ export default function About() {
                         <Link href="/book-consultation" className="inline-flex items-center gap-2 bg-navy-950 hover:bg-navy-900 text-white font-semibold px-10 py-4 rounded-sm transition-all duration-300 tracking-wide uppercase text-sm">
                             Book a Consultation
                         </Link>
-                        <a href="tel:+255738600670" className="inline-flex items-center gap-2 border-2 border-navy-950 text-navy-950 hover:bg-navy-950 hover:text-white font-semibold px-10 py-4 rounded-sm transition-all duration-300 tracking-wide uppercase text-sm">
-                            Call: +255 738 600 670
+                        <a href="tel:+255718694863" className="inline-flex items-center gap-2 border-2 border-navy-950 text-navy-950 hover:bg-navy-950 hover:text-white font-semibold px-10 py-4 rounded-sm transition-all duration-300 tracking-wide uppercase text-sm">
+                            Call: +255 718 694 863
                         </a>
                     </div>
                 </div>

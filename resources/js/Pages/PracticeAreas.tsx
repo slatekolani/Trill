@@ -379,7 +379,7 @@ export default function PracticeAreas() {
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
                         <Link href="/book-consultation" className="btn-primary">Book a Free Consultation</Link>
-                        <a href="tel:+255738600670" className="btn-outline">Call: +255 738 600 670</a>
+                        <a href="tel:+255718694863" className="btn-outline">Call: +255 718 694 863</a>
                     </div>
                 </div>
             </section>

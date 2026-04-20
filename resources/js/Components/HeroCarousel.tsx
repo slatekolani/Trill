@@ -3,7 +3,7 @@ import { Link } from '@inertiajs/react'
 
 const slides = [
     {
-        image:       'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=1920&q=80',
+        image:       'https://i.pinimg.com/1200x/55/9b/0b/559b0b58e9860d4b982bed48748f696e.jpg',
         badge:       'Tanzania\'s Premier Law Firm',
         title:       'Excellence in Legal Representation',
         description: 'Trill & Associates Advocates has been delivering exceptional legal services from the 18th Floor of Rita Tower, Dar-es-Salaam — serving clients across Tanzania and around the globe.',
@@ -11,7 +11,7 @@ const slides = [
         accent:      'from-navy-950/85 via-navy-900/65 to-transparent',
     },
     {
-        image:       'https://images.unsplash.com/photo-1556157382-97eda2f9aa05?auto=format&fit=crop&w=1920&q=80',
+        image:       'https://i.pinimg.com/736x/b5/c9/3f/b5c93f3f79fd3de51176200cece0914e.jpg',
         badge:       'Corporate & Commercial Law',
         title:       'Powering Businesses Across East Africa',
         description: 'From incorporation and governance to complex mergers and acquisitions — our corporate team provides the legal backbone your business needs to thrive in competitive markets.',

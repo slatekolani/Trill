@@ -47,7 +47,7 @@
     <p>If your matter is urgent, please do not hesitate to call us directly:</p>
 
     <div class="cta">
-      <a href="tel:+255738600670">Call +255 738 600 670</a>
+      <a href="tel:+255718694863">Call +255 718 694 863</a>
     </div>
 
     <hr class="divider" />

@@ -334,13 +334,13 @@ export default function PracticeArea({ slug }: Props) {
                             <div className="bg-white border border-gray-100 rounded-sm p-7">
                                 <h3 className="font-serif text-navy-950 text-lg font-semibold mb-4">Contact Us</h3>
                                 <div className="space-y-3">
-                                    <a href="tel:+255738600670" className="flex items-center gap-3 text-gray-600 hover:text-gold-600 transition-colors group">
+                                    <a href="tel:+255718694863" className="flex items-center gap-3 text-gray-600 hover:text-gold-600 transition-colors group">
                                         <div className="w-9 h-9 rounded-sm bg-navy-950 group-hover:bg-gold-500 flex items-center justify-center transition-colors flex-shrink-0">
                                             <svg className="w-4 h-4 text-gold-400 group-hover:text-white" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                                             </svg>
                                         </div>
-                                        <span className="text-sm font-medium">+255 738 600 670</span>
+                                        <span className="text-sm font-medium">+255 7１８ ６９４ ８６３</span>
                                     </a>
                                     <a href="mailto:info@trill.co.tz" className="flex items-center gap-3 text-gray-600 hover:text-gold-600 transition-colors group">
                                         <div className="w-9 h-9 rounded-sm bg-navy-950 group-hover:bg-gold-500 flex items-center justify-center transition-colors flex-shrink-0">
