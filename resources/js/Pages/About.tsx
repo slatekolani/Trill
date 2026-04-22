@@ -156,7 +156,8 @@ export default function About() {
                             alt="Scales of justice"
                             className="absolute inset-0 w-full h-full object-cover"
                         />
-                        <div className="absolute inset-0 bg-navy-950/96" />
+                        <div className="absolute inset-0 bg-gradient-to-r from-navy-950/97 via-navy-950/85 to-navy-900/60" />
+                        <div className="absolute inset-0 bg-navy-950/50" />
                         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-gold-600 to-gold-400" />
                         <div className="relative z-10 p-12 lg:p-16">
                             <div className="w-14 h-14 rounded-sm bg-gold-500/20 flex items-center justify-center mb-6">
@@ -174,14 +175,15 @@ export default function About() {
                         </div>
                     </div>
 
-                    {/* Vision — dark gold overlay, white text */}
+                    {/* Vision — dark navy overlay, white text */}
                     <div className="relative overflow-hidden min-h-[420px] flex items-center">
                         <img
                             src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=900&q=80"
                             alt="Modern architecture"
                             className="absolute inset-0 w-full h-full object-cover"
                         />
-                        <div className="absolute inset-0 bg-navy-950/93" />
+                        <div className="absolute inset-0 bg-gradient-to-r from-navy-950/97 via-navy-950/85 to-navy-900/60" />
+                        <div className="absolute inset-0 bg-navy-950/50" />
                         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-gold-500 to-gold-400" />
                         <div className="relative z-10 p-12 lg:p-16">
                             <div className="w-14 h-14 rounded-sm bg-gold-500/20 flex items-center justify-center mb-6">
@@ -250,7 +252,8 @@ export default function About() {
                             alt="Law firm professionals in meeting"
                             className="absolute inset-0 w-full h-full object-cover"
                         />
-                        <div className="absolute inset-0 bg-navy-950/80" />
+                        <div className="absolute inset-0 bg-gradient-to-r from-navy-950/97 via-navy-950/85 to-navy-900/60" />
+                        <div className="absolute inset-0 bg-navy-950/50" />
                         <div className="relative z-10 p-10 lg:p-14 flex flex-col justify-end h-full">
                             <p className="text-gold-400 text-xs tracking-[0.3em] uppercase font-medium mb-3">Our Journey</p>
                             <h2 className="font-serif text-white text-4xl font-bold leading-tight mb-4">
@@ -298,7 +301,8 @@ export default function About() {
                     alt="Office"
                     className="absolute inset-0 w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-navy-950/97" />
+                <div className="absolute inset-0 bg-gradient-to-r from-navy-950/97 via-navy-950/85 to-navy-900/60" />
+                <div className="absolute inset-0 bg-navy-950/50" />
 
                 <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="text-center mb-16">

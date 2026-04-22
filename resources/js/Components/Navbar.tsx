@@ -41,7 +41,7 @@ export default function Navbar() {
     const navRef = useRef<HTMLElement>(null)
 
     useEffect(() => {
-        const onScroll = () => setScrolled(window.scrollY > 60)
+        const onScroll = () => setScrolled(window.scrollY > 100)
         window.addEventListener('scroll', onScroll, { passive: true })
         return () => window.removeEventListener('scroll', onScroll)
     }, [])
@@ -73,6 +73,13 @@ export default function Navbar() {
     const toggleMobileExpand = (key: string) =>
         setMobileExpanded(prev => prev === key ? null : key)
 
+    const linkCls = (active: boolean) =>
+        active
+            ? 'text-gold-500'
+            : scrolled
+                ? 'text-navy-950 hover:text-navy-700'
+                : 'text-gray-300 hover:text-white'
+
     const ChevronIcon = ({ open }: { open: boolean }) => (
         <svg
             className={`w-3.5 h-3.5 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
@@ -86,7 +93,7 @@ export default function Navbar() {
         <header
             ref={navRef}
             className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-                scrolled ? 'bg-navy-950/98 backdrop-blur-md shadow-2xl py-2' : 'bg-transparent py-4'
+                scrolled ? 'bg-white shadow-lg py-2' : 'bg-transparent py-4'
             }`}
         >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
@@ -106,9 +113,7 @@ export default function Navbar() {
                     {/* Home */}
                     <Link
                         href="/"
-                        className={`relative text-xs font-medium tracking-widest uppercase px-3 py-2 transition-colors duration-300 ${
-                            isActive('/') && url === '/' ? 'text-gold-400' : 'text-gray-300 hover:text-white'
-                        }`}
+                        className={`relative text-xs font-medium tracking-widest uppercase px-3 py-2 transition-colors duration-300 ${linkCls(url === '/')}`}
                     >
                         Home
                     </Link>
@@ -117,9 +122,7 @@ export default function Navbar() {
                     <div className="relative">
                         <button
                             onClick={() => toggleDropdown('about')}
-                            className={`flex items-center gap-1.5 text-xs font-medium tracking-widest uppercase px-3 py-2 transition-colors duration-300 ${
-                                isActive('/about') || isActive('/team') ? 'text-gold-400' : 'text-gray-300 hover:text-white'
-                            }`}
+                            className={`flex items-center gap-1.5 text-xs font-medium tracking-widest uppercase px-3 py-2 transition-colors duration-300 ${linkCls(isActive('/about') || isActive('/team'))}`}
                         >
                             About
                             <ChevronIcon open={activeDropdown === 'about'} />
@@ -150,9 +153,7 @@ export default function Navbar() {
                     <div className="relative">
                         <button
                             onClick={() => toggleDropdown('practice')}
-                            className={`flex items-center gap-1.5 text-xs font-medium tracking-widest uppercase px-3 py-2 transition-colors duration-300 ${
-                                isActive('/practice-areas') ? 'text-gold-400' : 'text-gray-300 hover:text-white'
-                            }`}
+                            className={`flex items-center gap-1.5 text-xs font-medium tracking-widest uppercase px-3 py-2 transition-colors duration-300 ${linkCls(isActive('/practice-areas'))}`}
                         >
                             Practice Areas
                             <ChevronIcon open={activeDropdown === 'practice'} />
@@ -233,9 +234,7 @@ export default function Navbar() {
                     {/* Legal Insights */}
                     <Link
                         href="/insights"
-                        className={`text-xs font-medium tracking-widest uppercase px-3 py-2 transition-colors duration-300 ${
-                            isActive('/insights') ? 'text-gold-400' : 'text-gray-300 hover:text-white'
-                        }`}
+                        className={`text-xs font-medium tracking-widest uppercase px-3 py-2 transition-colors duration-300 ${linkCls(isActive('/insights'))}`}
                     >
                         Legal Insights
                     </Link>
@@ -243,9 +242,7 @@ export default function Navbar() {
                     {/* Contact */}
                     <Link
                         href="/contact"
-                        className={`text-xs font-medium tracking-widest uppercase px-3 py-2 transition-colors duration-300 ${
-                            isActive('/contact') ? 'text-gold-400' : 'text-gray-300 hover:text-white'
-                        }`}
+                        className={`text-xs font-medium tracking-widest uppercase px-3 py-2 transition-colors duration-300 ${linkCls(isActive('/contact'))}`}
                     >
                         Contact
                     </Link>
@@ -264,14 +261,14 @@ export default function Navbar() {
 
                 {/* Mobile hamburger */}
                 <button
-                    className="lg:hidden text-white p-2"
+                    className={`lg:hidden p-2 transition-colors duration-300 ${scrolled ? 'text-navy-950' : 'text-white'}`}
                     onClick={() => setMenuOpen(!menuOpen)}
                     aria-label="Toggle menu"
                 >
                     <div className="w-6 flex flex-col gap-1.5">
-                        <span className={`block h-0.5 bg-white transition-all duration-300 ${menuOpen ? 'rotate-45 translate-y-2' : ''}`} />
-                        <span className={`block h-0.5 bg-white transition-all duration-300 ${menuOpen ? 'opacity-0' : ''}`} />
-                        <span className={`block h-0.5 bg-white transition-all duration-300 ${menuOpen ? '-rotate-45 -translate-y-2' : ''}`} />
+                        <span className={`block h-0.5 transition-all duration-300 ${scrolled ? 'bg-navy-950' : 'bg-white'} ${menuOpen ? 'rotate-45 translate-y-2' : ''}`} />
+                        <span className={`block h-0.5 transition-all duration-300 ${scrolled ? 'bg-navy-950' : 'bg-white'} ${menuOpen ? 'opacity-0' : ''}`} />
+                        <span className={`block h-0.5 transition-all duration-300 ${scrolled ? 'bg-navy-950' : 'bg-white'} ${menuOpen ? '-rotate-45 -translate-y-2' : ''}`} />
                     </div>
                 </button>
             </div>
