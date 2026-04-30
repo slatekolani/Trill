@@ -198,6 +198,19 @@ export default function Footer() {
                         <Link href="/insights" className="hover:text-gold-400 transition-colors">Legal Insights</Link>
                     </div>
                 </div>
+                <div className="pt-4 text-center">
+                    <p className="text-xs text-gray-600">
+                        Developed by{' '}
+                        <a
+                            href="https://nextbyte.co.tz/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-gray-500 hover:text-gold-400 transition-colors"
+                        >
+                            NextByte ICT Solutions
+                        </a>
+                    </p>
+                </div>
             </div>
         </footer>
     )
