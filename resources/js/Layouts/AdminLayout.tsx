@@ -17,6 +17,15 @@ const navItems = [
         ),
     },
     {
+        label: 'Profile',
+        href:  '/admin/profile',
+        icon: (
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={1.8} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 7.5a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 20.25a8.25 8.25 0 1115 0" />
+            </svg>
+        ),
+    },
+    {
         label: 'Articles',
         href:  '/admin/articles',
         icon: (
@@ -35,6 +44,51 @@ const navItems = [
         ),
     },
     {
+        label: 'Hero Slides',
+        href:  '/admin/hero-slides',
+        icon: (
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={1.8} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5V7.5A2.25 2.25 0 015.25 5.25h13.5A2.25 2.25 0 0121 7.5v9a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 16.5zm3-1.5l3.75-3.75 2.25 2.25 3.75-4.5L18 12" />
+            </svg>
+        ),
+    },
+    {
+        label: 'Practice Areas',
+        href:  '/admin/practice-areas',
+        icon: (
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={1.8} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.75v10.5m5.25-5.25H6.75M4.5 4.5h15v15h-15z" />
+            </svg>
+        ),
+    },
+    {
+        label: 'Sectors',
+        href:  '/admin/sectors',
+        icon: (
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={1.8} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 21h16.5M4.5 3h15M6.75 6.75h10.5M6.75 11.25h10.5M6.75 15.75h10.5" />
+            </svg>
+        ),
+    },
+    {
+        label: 'Memberships',
+        href:  '/admin/memberships',
+        icon: (
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={1.8} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75l2.25 2.25L15 9.75M12 3.75l7.5 3v5.25c0 4.739-3.13 8.96-7.5 10.25-4.37-1.29-7.5-5.511-7.5-10.25V6.75l7.5-3z" />
+            </svg>
+        ),
+    },
+    {
+        label: 'Content Blocks',
+        href:  '/admin/content-blocks',
+        icon: (
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={1.8} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 6.75h15M4.5 12h15M4.5 17.25h9" />
+            </svg>
+        ),
+    },
+    {
         label: 'Categories',
         href:  '/admin/categories',
         icon: (
@@ -46,7 +100,17 @@ const navItems = [
 ]
 
 export default function AdminLayout({ children, title }: Props) {
-    const { url } = usePage()
+    const { url, props } = usePage<{
+        auth?: {
+            user?: {
+                name: string
+                email: string
+                is_admin: boolean
+            } | null
+        }
+    }>()
+    const user = props.auth?.user
+    const userInitial = user?.name?.trim()?.charAt(0)?.toUpperCase() || 'A'
     const [sidebarOpen, setSidebarOpen] = useState(false)
 
     const handleLogout = () => {
@@ -57,12 +121,14 @@ export default function AdminLayout({ children, title }: Props) {
         <div className="min-h-screen bg-gray-100 flex">
 
             {/* ── SIDEBAR ── */}
-            <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-navy-950 flex flex-col transform transition-transform duration-300 lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+            <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-[#2f2526] flex flex-col transform transition-transform duration-300 lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
 
                 {/* Brand */}
-                <div className="px-6 py-5 border-b border-white/10">
-                    <img src="/Logo/trill_logo.png" alt="Trill" className="h-10 object-contain" />
-                    <p className="text-gray-500 text-xs mt-1 tracking-widest uppercase">Admin Panel</p>
+                <div className="px-5 py-5 border-b border-white/10">
+                    <Link href="/" className="block bg-white border border-gold-100 px-4 py-3 rounded-sm shadow-sm transition-shadow hover:shadow-md">
+                        <img src="/Logo/trill_logo.png" alt="Trill" className="h-11 w-full object-contain" />
+                    </Link>
+                    <p className="text-gold-200 text-xs mt-3 tracking-widest uppercase">Admin Panel</p>
                 </div>
 
                 {/* Nav */}
@@ -134,12 +200,12 @@ export default function AdminLayout({ children, title }: Props) {
                             <h1 className="font-serif text-navy-950 text-lg font-semibold">{title}</h1>
                         )}
                     </div>
-                    <div className="flex items-center gap-2 text-xs text-gray-500">
+                    <Link href="/admin/profile" className="flex items-center gap-2 rounded-sm px-2 py-1 text-xs text-gray-500 transition-colors hover:bg-gray-50 hover:text-navy-950">
                         <div className="w-7 h-7 rounded-full bg-gold-500 flex items-center justify-center">
-                            <span className="text-white font-bold text-xs">A</span>
+                            <span className="text-white font-bold text-xs">{userInitial}</span>
                         </div>
-                        <span className="hidden sm:block">Admin</span>
-                    </div>
+                        <span className="hidden sm:block">{user?.name ?? 'Admin'}</span>
+                    </Link>
                 </header>
 
                 {/* Page content */}

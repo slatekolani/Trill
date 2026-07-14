@@ -1,30 +1,36 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Link } from '@inertiajs/react'
 
-const slides = [
+interface HeroSlide {
+    image: string | null
+    badge: string | null
+    title: string
+    description: string | null
+    cta: { label: string; href: string }
+    accent?: string
+}
+
+const fallbackSlides: HeroSlide[] = [
     {
         image:       'https://i.pinimg.com/1200x/55/9b/0b/559b0b58e9860d4b982bed48748f696e.jpg',
-        badge:       'Tanzania\'s Premier Law Firm',
-        title:       'Excellence in Legal Representation',
-        description: 'Trill & Associates Advocates has been delivering exceptional legal services from the 18th Floor of Rita Tower, Dar-es-Salaam — serving clients across Tanzania and around the globe.',
-        cta:         { label: 'Free Consultation', href: '/contact' },
-        accent:      'from-navy-950/85 via-navy-900/65 to-transparent',
+        badge:       'Dar-es-Salaam Counsel',
+        title:       'Serious Legal Work, Clear Commercial Judgment',
+        description: 'Trill & Associates Advocates advises businesses, investors, institutions, and private clients from Rita Tower in Dar-es-Salaam across Tanzania and beyond.',
+        cta:         { label: 'Book Consultation', href: '/book-consultation' },
     },
     {
         image:       'https://i.pinimg.com/736x/b5/c9/3f/b5c93f3f79fd3de51176200cece0914e.jpg',
         badge:       'Corporate & Commercial Law',
-        title:       'Powering Businesses Across East Africa',
-        description: 'From incorporation and governance to complex mergers and acquisitions — our corporate team provides the legal backbone your business needs to thrive in competitive markets.',
-        cta:         { label: 'Learn More', href: '/about' },
-        accent:      'from-navy-950/85 via-navy-900/65 to-transparent',
+        title:       'Commercial Law with Boardroom Clarity',
+        description: 'From incorporation and governance to complex mergers and acquisitions, our corporate team provides the legal backbone your business needs to thrive in competitive markets.',
+        cta:         { label: 'Explore Services', href: '/practice-areas' },
     },
     {
         image:       'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=1920&q=80',
         badge:       'Intellectual Property',
-        title:       'Protecting Your Innovations & Creative Works',
-        description: 'Our IP team safeguards trademarks, patents, copyrights, and trade secrets — ensuring your innovations are legally protected both locally and internationally.',
+        title:       'Protecting Ideas, Brands, and Creative Work',
+        description: 'Our IP team safeguards trademarks, patents, copyrights, and trade secrets, ensuring your innovations are legally protected both locally and internationally.',
         cta:         { label: 'Protect Your IP', href: '/contact' },
-        accent:      'from-navy-950/80 via-navy-900/55 to-transparent',
     },
     {
         image:       'https://images.unsplash.com/photo-1466611653911-95081537e5b7?auto=format&fit=crop&w=1920&q=80',
@@ -32,15 +38,13 @@ const slides = [
         title:       'Legal Expertise in Tanzania\'s Energy Sector',
         description: 'Specialist legal counsel for exploration agreements, production sharing contracts, regulatory compliance, and all aspects of Tanzania\'s growing oil and gas industry.',
         cta:         { label: 'Energy Sector Services', href: '/contact' },
-        accent:      'from-navy-950/85 via-navy-950/60 to-transparent',
     },
     {
         image:       'https://images.unsplash.com/photo-1589994965851-a8f479c573a9?auto=format&fit=crop&w=1920&q=80',
         badge:       'Justice & Human Rights',
-        title:       'Championing Rights & Upholding Justice',
+        title:       'Championing Rights and Upholding Justice',
         description: 'We are committed to defending fundamental freedoms. Our advocates stand ready to represent individuals and organisations before the courts of Tanzania and beyond.',
         cta:         { label: 'Seek Justice', href: '/contact' },
-        accent:      'from-navy-950/80 via-navy-900/55 to-transparent',
     },
     {
         image:       'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1920&q=80',
@@ -48,11 +52,11 @@ const slides = [
         title:       'Expert Advice for Financial Institutions',
         description: 'Comprehensive legal services covering banking regulations, loan agreements, financial instruments, debt restructuring, and regulatory compliance for Tanzania\'s financial sector.',
         cta:         { label: 'Financial Legal Services', href: '/contact' },
-        accent:      'from-navy-950/80 via-navy-900/50 to-transparent',
     },
 ]
 
-export default function HeroCarousel() {
+export default function HeroCarousel({ slides = [] }: { slides?: HeroSlide[] }) {
+    const activeSlides = slides.length > 0 ? slides : fallbackSlides
     const [current,   setCurrent]   = useState(0)
     const [animating, setAnimating] = useState(false)
     const [paused,    setPaused]    = useState(false)
@@ -64,109 +68,97 @@ export default function HeroCarousel() {
         setTimeout(() => setAnimating(false), 700)
     }, [animating])
 
-    const next = useCallback(() => goTo((current + 1) % slides.length), [current, goTo])
-    const prev = useCallback(() => goTo((current - 1 + slides.length) % slides.length), [current, goTo])
+    const next = useCallback(() => goTo((current + 1) % activeSlides.length), [current, goTo, activeSlides.length])
+    const prev = useCallback(() => goTo((current - 1 + activeSlides.length) % activeSlides.length), [current, goTo, activeSlides.length])
 
-    // Auto-advance
     useEffect(() => {
         if (paused) return
-        const timer = setInterval(next, 6000)
+        const timer = setInterval(next, 6500)
         return () => clearInterval(timer)
     }, [next, paused])
 
     return (
         <section
-            className="relative h-screen min-h-[600px] overflow-hidden"
+            className="relative min-h-[720px] overflow-hidden bg-[#683030] pt-24 lg:min-h-screen lg:pt-0"
             onMouseEnter={() => setPaused(true)}
             onMouseLeave={() => setPaused(false)}
         >
-            {/* Slides */}
-            {slides.map((slide, i) => (
+            {activeSlides.map((slide, i) => (
                 <div
                     key={i}
                     className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
                         i === current ? 'opacity-100 z-10' : 'opacity-0 z-0'
                     }`}
                 >
-                    {/* Background image */}
                     <img
-                        src={slide.image}
+                        src={slide.image || fallbackSlides[0].image || ''}
                         alt={slide.title}
-                        className="absolute inset-0 w-full h-full object-cover scale-105 transition-transform duration-[8000ms] ease-out"
-                        style={{ transform: i === current ? 'scale(1)' : 'scale(1.05)' }}
+                        className="absolute inset-0 h-full w-full object-cover transition-transform duration-[9000ms] ease-out"
+                        style={{ transform: i === current ? 'scale(1)' : 'scale(1.04)' }}
                         loading={i === 0 ? 'eager' : 'lazy'}
                     />
-
-                    {/* Gradient overlay */}
-                    <div className={`absolute inset-0 bg-gradient-to-r ${slide.accent}`} />
-                    <div className="absolute inset-0 bg-gradient-to-t from-navy-950/70 via-transparent to-navy-950/30" />
-                    {/* Flat dark layer — ensures text is always readable across all images */}
-                    <div className="absolute inset-0 bg-navy-950/45" />
-
-                    {/* Vertical gold line */}
-                    <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-transparent via-gold-500 to-transparent opacity-70 z-20" />
+                    <div className="absolute inset-0 bg-[#241313]/55 sm:bg-[#241313]/45 lg:bg-transparent" />
+                    <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(68,28,28,0.94)_0%,rgba(104,48,48,0.70)_36%,rgba(104,48,48,0.30)_62%,rgba(28,23,20,0.10)_82%,transparent_100%)]" />
+                    <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(28,23,20,0.62)_0%,rgba(28,23,20,0.34)_34%,rgba(28,23,20,0.10)_62%,transparent_84%)]" />
                 </div>
             ))}
 
-            {/* Content */}
-            <div className="relative z-20 h-full flex items-center">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-                    <div className="max-w-3xl">
-                        {/* Badge */}
+            <div className="relative z-20 flex min-h-[720px] items-center lg:min-h-screen">
+                <div className="mx-auto w-full max-w-7xl px-4 pb-16 pt-10 sm:px-6 lg:px-8 lg:pb-20 lg:pt-32">
+                    <div className="max-w-3xl lg:pl-8">
                         <div
                             key={`badge-${current}`}
-                            className="inline-flex items-center gap-3 mb-6 animate-fade-in-up"
+                            className="mb-5 inline-flex items-center gap-3 animate-fade-in-up md:mb-7"
                             style={{ animationDelay: '0.1s', animationFillMode: 'both' }}
                         >
-                            <span className="h-px w-10 bg-gold-400" />
-                            <span className="text-gold-400 text-xs tracking-[0.35em] uppercase font-medium font-sans">
-                                {slides[current].badge}
+                            <span className="h-px w-12 bg-gold-400" />
+                            <span className="text-gold-300 text-[0.68rem] font-semibold uppercase tracking-[0.28em] sm:text-xs">
+                                {activeSlides[current].badge}
                             </span>
                         </div>
 
-                        {/* Title */}
                         <h1
                             key={`title-${current}`}
-                            className="font-serif text-white text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 animate-fade-in-up"
+                            className="max-w-3xl font-serif text-[2.65rem] font-semibold leading-[1.03] text-white animate-fade-in-up sm:text-5xl lg:text-6xl xl:text-7xl text-balance"
                             style={{ animationDelay: '0.2s', animationFillMode: 'both' }}
                         >
-                            {slides[current].title}
+                            {activeSlides[current].title}
                         </h1>
 
-                        {/* Description */}
+                        <div className="mt-6 h-px w-28 bg-gold-500 md:mt-7" />
+
                         <p
                             key={`desc-${current}`}
-                            className="text-gray-200 text-lg md:text-xl leading-relaxed mb-10 max-w-2xl animate-fade-in-up"
+                            className="mt-5 max-w-2xl text-base leading-8 text-white/90 animate-fade-in-up md:mt-6 md:text-lg"
                             style={{ animationDelay: '0.35s', animationFillMode: 'both' }}
                         >
-                            {slides[current].description}
+                            {activeSlides[current].description}
                         </p>
 
-                        {/* CTAs */}
                         <div
                             key={`cta-${current}`}
-                            className="flex flex-col sm:flex-row gap-4 animate-fade-in-up"
+                            className="mt-6 flex flex-col gap-3 animate-fade-in-up sm:flex-row md:mt-8"
                             style={{ animationDelay: '0.5s', animationFillMode: 'both' }}
                         >
-                            <Link href={slides[current].cta.href} className="btn-primary text-sm px-8 py-4">
-                                {slides[current].cta.label}
+                            <Link href={activeSlides[current].cta.href} className="btn-primary text-sm px-8 py-4">
+                                {activeSlides[current].cta.label}
                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                                 </svg>
                             </Link>
-                            <Link href="/about" className="btn-outline text-sm px-8 py-4">
-                                About Our Firm
+                            <Link href="/practice-areas" className="inline-flex items-center justify-center gap-2 border border-white/70 px-8 py-4 text-sm font-semibold uppercase tracking-wide text-white transition-all duration-300 hover:bg-white hover:text-[#572929]">
+                                View Expertise
                             </Link>
                         </div>
+
                     </div>
                 </div>
             </div>
 
-            {/* Arrow navigation */}
             <button
                 onClick={prev}
                 aria-label="Previous slide"
-                className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full bg-white/10 hover:bg-gold-500 border border-white/20 hover:border-gold-500 text-white flex items-center justify-center transition-all duration-300 backdrop-blur-sm"
+                className="absolute right-20 top-1/2 z-30 hidden h-11 w-11 -translate-y-1/2 items-center justify-center border border-gold-300 bg-gold-50/85 text-[#683030] backdrop-blur-md transition-all duration-300 hover:bg-white lg:flex"
             >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
@@ -175,45 +167,40 @@ export default function HeroCarousel() {
             <button
                 onClick={next}
                 aria-label="Next slide"
-                className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full bg-white/10 hover:bg-gold-500 border border-white/20 hover:border-gold-500 text-white flex items-center justify-center transition-all duration-300 backdrop-blur-sm"
+                className="absolute right-8 top-1/2 z-30 hidden h-11 w-11 -translate-y-1/2 items-center justify-center border border-gold-300 bg-gold-50/85 text-[#683030] backdrop-blur-md transition-all duration-300 hover:bg-white lg:flex"
             >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
                 </svg>
             </button>
 
-            {/* Dot indicators */}
-            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 flex items-center gap-3">
-                {slides.map((_, i) => (
+            <div className="absolute bottom-12 right-8 z-30 hidden items-center gap-3 lg:flex">
+                {activeSlides.map((_, i) => (
                     <button
                         key={i}
                         onClick={() => goTo(i)}
                         aria-label={`Go to slide ${i + 1}`}
-                        className={`transition-all duration-300 rounded-full ${
+                        className={`rounded-full transition-all duration-300 ${
                             i === current
-                                ? 'w-8 h-2 bg-gold-400'
-                                : 'w-2 h-2 bg-white/40 hover:bg-white/70'
+                                ? 'w-8 h-2 bg-gold-300'
+                                : 'w-2 h-2 bg-white/40 hover:bg-white/75'
                         }`}
                     />
                 ))}
             </div>
 
-            {/* Slide counter */}
-            <div className="absolute bottom-8 right-8 z-30 text-white/60 text-sm font-mono hidden md:block">
-                <span className="text-gold-400 font-semibold">{String(current + 1).padStart(2, '0')}</span>
+            <div className="absolute bottom-8 left-4 z-30 text-sm font-mono text-white/70 sm:left-6 lg:left-auto lg:right-8 lg:bottom-24">
+                <span className="font-semibold text-gold-300">{String(current + 1).padStart(2, '0')}</span>
                 <span className="mx-1">/</span>
-                {String(slides.length).padStart(2, '0')}
+                {String(activeSlides.length).padStart(2, '0')}
             </div>
 
-            {/* Progress bar */}
-            <div className="absolute bottom-0 left-0 right-0 z-30 h-0.5 bg-white/10">
+            <div className="absolute bottom-0 left-0 right-0 z-30 h-0.5 bg-white/20">
                 {!paused && (
                     <div
                         key={`progress-${current}`}
                         className="h-full bg-gold-400 origin-left"
-                        style={{
-                            animation: 'progressBar 6s linear forwards',
-                        }}
+                        style={{ animation: 'progressBar 6.5s linear forwards' }}
                     />
                 )}
             </div>

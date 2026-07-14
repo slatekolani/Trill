@@ -3,11 +3,11 @@ import { FormEventHandler } from 'react'
 import AdminLayout from '@/Layouts/AdminLayout'
 import ArticleForm from './ArticleForm'
 
-interface Category { id: number; name: string }
+interface Category { id: string; name: string }
 interface ArticleData {
-    id:           number
+    id:           string
     title:        string
-    category_id:  number
+    category_id:  string
     author:       string
     author_role:  string
     excerpt:      string

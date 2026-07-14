@@ -1,9 +1,10 @@
 import { Head, Link, router, useForm } from '@inertiajs/react'
 import { FormEventHandler, useState } from 'react'
 import AdminLayout from '@/Layouts/AdminLayout'
+import { confirmDelete, showDashboardAlert } from '@/lib/confirm'
 
 interface Category {
-    id: number
+    id: string
     name: string
     slug: string
     articles_count: number
@@ -20,9 +21,21 @@ export default function CategoriesIndex({ categories }: Props) {
         post('/admin/categories', { onSuccess: () => { reset(); setCreating(false) } })
     }
 
-    const handleDelete = (id: number, name: string, count: number) => {
-        if (count > 0) { alert(`Cannot delete "${name}" — it has ${count} article(s). Reassign them first.`); return }
-        if (!confirm(`Delete category "${name}"?`)) return
+    const handleDelete = async (id: string, name: string, count: number) => {
+        if (count > 0) {
+            await showDashboardAlert({
+                title: `Cannot delete "${name}"`,
+                text: `This category has ${count} article(s). Reassign them first.`,
+            })
+            return
+        }
+
+        const confirmed = await confirmDelete({
+            title: `Delete category "${name}"?`,
+            confirmButtonText: 'Yes, delete category',
+        })
+        if (!confirmed) return
+
         router.delete(`/admin/categories/${id}`)
     }
 
@@ -58,7 +71,7 @@ export default function CategoriesIndex({ categories }: Props) {
                         {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
                     </div>
                     <button type="submit" disabled={processing}
-                        className="bg-navy-950 hover:bg-navy-900 disabled:opacity-60 text-white text-sm font-semibold px-5 py-2.5 rounded-sm transition-colors">
+                        className="bg-[#683030] hover:bg-[#572929] disabled:opacity-60 text-white text-sm font-semibold px-5 py-2.5 rounded-sm transition-colors">
                         {processing ? 'Creating…' : 'Create'}
                     </button>
                     <button type="button" onClick={() => setCreating(false)}

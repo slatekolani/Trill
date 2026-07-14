@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Mail\ConsultationFormFirm;
 use App\Mail\ConsultationFormUser;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Throwable;
 
 class BookConsultationController extends Controller
 {
@@ -25,13 +27,24 @@ class BookConsultationController extends Controller
             'how_heard'      => ['nullable', 'string', 'max:100'],
         ]);
 
-        // Notify the firm
-        Mail::to('info@trill.co.tz')
-            ->send(new ConsultationFormFirm($data));
+        try {
+            // Notify the firm
+            Mail::to('info@trill.co.tz')
+                ->send(new ConsultationFormFirm($data));
 
-        // Send confirmation to the client
-        Mail::to($data['email'], $data['name'])
-            ->send(new ConsultationFormUser($data));
+            // Send confirmation to the client
+            Mail::to($data['email'], $data['name'])
+                ->send(new ConsultationFormUser($data));
+        } catch (Throwable $e) {
+            Log::error('Consultation request email failed.', [
+                'email' => $data['email'],
+                'error' => $e->getMessage(),
+            ]);
+
+            return back()
+                ->withInput()
+                ->with('error', 'We could not submit your consultation request right now. Please call or email us directly.');
+        }
 
         return back()->with('success', 'Your consultation request has been submitted. We will contact you within 24 hours to confirm your appointment.');
     }

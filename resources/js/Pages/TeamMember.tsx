@@ -5,7 +5,7 @@ import Seo from '@/Components/Seo'
 interface Education { degree: string; institution: string }
 
 interface Member {
-    id:             number
+    id:             string
     name:           string
     role:           string
     bio:            string
@@ -54,13 +54,14 @@ export default function TeamMemberPage({ member }: Props) {
             />
 
             {/* ── HERO ── */}
-            <section className="relative bg-navy-950 pt-36 pb-20 overflow-hidden">
-                <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-transparent via-gold-500 to-transparent opacity-70" />
-                <div className="absolute inset-0 opacity-5"
-                    style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")` }}
+            <section className="relative min-h-[60vh] flex items-center overflow-hidden">
+                <img
+                    src="https://images.unsplash.com/photo-1573164574511-73c773193279?q=80&w=2338&auto=format&fit=crop"
+                    alt={member.name}
+                    className="absolute inset-0 w-full h-full object-cover"
                 />
-
-                <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(36,19,19,0.82)_0%,rgba(36,19,19,0.44)_46%,rgba(36,19,19,0.10)_76%),linear-gradient(to_top,rgba(104,48,48,0.88)_0%,rgba(104,48,48,0.36)_44%,transparent_78%)]" />
+                <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20 w-full">
                     {/* Breadcrumb */}
                     <div className="flex items-center gap-2 text-sm mb-10">
                         <Link href="/" className="text-gray-400 hover:text-gold-400 transition-colors">Home</Link>
@@ -77,7 +78,7 @@ export default function TeamMemberPage({ member }: Props) {
                                 {member.avatar_url ? (
                                     <img src={member.avatar_url} alt={member.name} className="w-full h-full object-cover" />
                                 ) : (
-                                    <div className="w-full h-full bg-gradient-to-br from-navy-700 to-navy-900 flex items-center justify-center">
+                                    <div className="w-full h-full bg-gradient-to-br from-[#683030] to-[#572929] flex items-center justify-center">
                                         <span className="font-serif text-white text-5xl font-bold">{member.initials}</span>
                                     </div>
                                 )}
@@ -157,7 +158,7 @@ export default function TeamMemberPage({ member }: Props) {
                                     <div className="space-y-4">
                                         {member.education.map((edu, i) => (
                                             <div key={i} className="flex items-start gap-4 p-5 bg-gray-50 border border-gray-100 rounded-sm">
-                                                <div className="w-9 h-9 rounded-full bg-navy-950 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                                <div className="w-9 h-9 rounded-full bg-[#683030] flex items-center justify-center flex-shrink-0 mt-0.5">
                                                     <svg className="w-4 h-4 text-gold-400" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5" />
                                                     </svg>
@@ -199,12 +200,12 @@ export default function TeamMemberPage({ member }: Props) {
                                     Schedule a consultation with {member.name.split(' ')[0]} or contact our team directly.
                                 </p>
                                 <Link href="/book-consultation"
-                                    className="block w-full text-center bg-navy-950 hover:bg-navy-900 text-white font-semibold px-5 py-3 rounded-sm transition-colors text-sm uppercase tracking-wide mb-3">
+                                    className="block w-full text-center bg-[#683030] hover:bg-[#572929] text-white font-semibold px-5 py-3 rounded-sm transition-colors text-sm uppercase tracking-wide mb-3">
                                     Book a Consultation
                                 </Link>
                                 {member.email && (
                                     <a href={`mailto:${member.email}`}
-                                        className="block w-full text-center border-2 border-navy-950 text-navy-950 hover:bg-navy-950 hover:text-white font-semibold px-5 py-3 rounded-sm transition-all text-sm uppercase tracking-wide">
+                                        className="block w-full text-center border-2 border-navy-950 text-navy-950 hover:bg-[#683030] hover:text-white font-semibold px-5 py-3 rounded-sm transition-all text-sm uppercase tracking-wide">
                                         Email Directly
                                     </a>
                                 )}
@@ -249,19 +250,6 @@ export default function TeamMemberPage({ member }: Props) {
                 </div>
             </section>
 
-            {/* ── CTA ── */}
-            <section className="py-16 bg-navy-950">
-                <div className="relative max-w-4xl mx-auto px-4 text-center">
-                    <h2 className="font-serif text-white text-3xl font-bold mb-4">Need Legal Assistance?</h2>
-                    <p className="text-gray-400 text-base mb-8 max-w-xl mx-auto">
-                        Our advocates are ready to help you navigate your legal challenges with expertise and dedication.
-                    </p>
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <Link href="/book-consultation" className="btn-primary">Book a Consultation</Link>
-                        <Link href="/contact" className="btn-outline">Contact Us</Link>
-                    </div>
-                </div>
-            </section>
         </MainLayout>
     )
 }

@@ -3,7 +3,7 @@ import { FormEventHandler } from 'react'
 import AdminLayout from '@/Layouts/AdminLayout'
 import ArticleForm from './ArticleForm'
 
-interface Category { id: number; name: string }
+interface Category { id: string; name: string }
 interface Props { categories: Category[] }
 
 export default function ArticleCreate({ categories }: Props) {

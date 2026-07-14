@@ -16,7 +16,7 @@ class InsightsController extends Controller
             ->latest('published_at')
             ->get()
             ->map(fn ($a) => [
-                'id'          => $a->id,
+                'id'          => $a->uuid,
                 'slug'        => $a->slug,
                 'title'       => $a->title,
                 'excerpt'     => $a->excerpt,
@@ -60,7 +60,7 @@ class InsightsController extends Controller
 
         return Inertia::render('Insight', [
             'article' => [
-                'id'          => $article->id,
+                'id'          => $article->uuid,
                 'slug'        => $article->slug,
                 'title'       => $article->title,
                 'category'    => $article->category?->name,

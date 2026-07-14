@@ -4,7 +4,7 @@ import AdminLayout from '@/Layouts/AdminLayout'
 import TeamForm from './TeamForm'
 
 interface MemberData {
-    id:             number
+    id:             string
     name:           string
     role:           string
     bio:            string

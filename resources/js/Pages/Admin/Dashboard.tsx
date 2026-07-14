@@ -7,10 +7,15 @@ interface Stats {
     drafts: number
     team_members: number
     categories: number
+    hero_slides: number
+    practice_areas: number
+    sectors: number
+    memberships: number
+    content_blocks: number
 }
 
 interface RecentArticle {
-    id: number
+    id: string
     title: string
     slug: string
     category: string
@@ -32,7 +37,7 @@ const statCards = (stats: Stats) => [
                 <path strokeLinecap="round" strokeLinejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
             </svg>
         ),
-        color: 'bg-blue-50 text-blue-600',
+        color: 'bg-gold-50 text-[#683030]',
         href: '/admin/articles',
     },
     {
@@ -58,15 +63,37 @@ const statCards = (stats: Stats) => [
         href: '/admin/articles',
     },
     {
-        label: 'Team Members',
-        value: stats.team_members,
+        label: 'Practice Areas',
+        value: stats.practice_areas,
         icon: (
             <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={1.8} viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
         ),
         color: 'bg-purple-50 text-purple-600',
-        href: '/admin/team',
+        href: '/admin/practice-areas',
+    },
+    {
+        label: 'Sectors',
+        value: stats.sectors,
+        icon: (
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={1.8} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4M9 9h1m-1 4h1m-1 4h1m5-4h1m-1 4h1" />
+            </svg>
+        ),
+        color: 'bg-gold-50 text-gold-600',
+        href: '/admin/sectors',
+    },
+    {
+        label: 'Memberships',
+        value: stats.memberships,
+        icon: (
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={1.8} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75l2.25 2.25L15 9.75M12 3.75l7.5 3v5.25c0 4.739-3.13 8.96-7.5 10.25-4.37-1.29-7.5-5.511-7.5-10.25V6.75l7.5-3z" />
+            </svg>
+        ),
+        color: 'bg-navy-50 text-[#683030]',
+        href: '/admin/memberships',
     },
 ]
 
@@ -76,7 +103,7 @@ export default function Dashboard({ stats, recentArticles }: Props) {
             <Head title="Dashboard — Admin" />
 
             {/* Stats */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            <div className="grid grid-cols-2 lg:grid-cols-6 gap-4 mb-8">
                 {statCards(stats).map((card) => (
                     <Link key={card.label} href={card.href} className="bg-white rounded-sm shadow-sm p-5 hover:shadow-md transition-shadow">
                         <div className={`w-10 h-10 rounded-full ${card.color} flex items-center justify-center mb-3`}>
@@ -101,6 +128,18 @@ export default function Dashboard({ stats, recentArticles }: Props) {
                             <span className="w-7 h-7 bg-gold-50 rounded-full flex items-center justify-center text-gold-600 text-lg font-bold">+</span>
                             Add Team Member
                         </Link>
+                        <Link href="/admin/hero-slides/create" className="flex items-center gap-3 text-sm text-gray-600 hover:text-gold-600 transition-colors py-1.5">
+                            <span className="w-7 h-7 bg-gold-50 rounded-full flex items-center justify-center text-gold-600 text-lg font-bold">+</span>
+                            Add Hero Slide
+                        </Link>
+                        <Link href="/admin/sectors/create" className="flex items-center gap-3 text-sm text-gray-600 hover:text-gold-600 transition-colors py-1.5">
+                            <span className="w-7 h-7 bg-gold-50 rounded-full flex items-center justify-center text-gold-600 text-lg font-bold">+</span>
+                            Add Sector
+                        </Link>
+                        <Link href="/admin/memberships/create" className="flex items-center gap-3 text-sm text-gray-600 hover:text-gold-600 transition-colors py-1.5">
+                            <span className="w-7 h-7 bg-gold-50 rounded-full flex items-center justify-center text-gold-600 text-lg font-bold">+</span>
+                            Add Membership
+                        </Link>
                         <Link href="/admin/categories/create" className="flex items-center gap-3 text-sm text-gray-600 hover:text-gold-600 transition-colors py-1.5">
                             <span className="w-7 h-7 bg-gold-50 rounded-full flex items-center justify-center text-gold-600 text-lg font-bold">+</span>
                             New Category
@@ -116,7 +155,7 @@ export default function Dashboard({ stats, recentArticles }: Props) {
                     </div>
                 </div>
 
-                <div className="bg-navy-950 rounded-sm shadow-sm p-6">
+                <div className="bg-[#683030] rounded-sm shadow-sm p-6">
                     <h2 className="font-serif text-white font-semibold text-base mb-1">Content Summary</h2>
                     <p className="text-gray-400 text-xs mb-4">Trill &amp; Associates Admin Portal</p>
                     <div className="space-y-3">
@@ -125,6 +164,10 @@ export default function Dashboard({ stats, recentArticles }: Props) {
                             { label: 'Published', value: stats.published },
                             { label: 'Categories', value: stats.categories },
                             { label: 'Team Members', value: stats.team_members },
+                            { label: 'Hero Slides', value: stats.hero_slides },
+                            { label: 'Practice Areas', value: stats.practice_areas },
+                            { label: 'Sectors', value: stats.sectors },
+                            { label: 'Copy Blocks', value: stats.content_blocks },
                         ].map(item => (
                             <div key={item.label} className="flex items-center justify-between">
                                 <span className="text-gray-400 text-sm">{item.label}</span>

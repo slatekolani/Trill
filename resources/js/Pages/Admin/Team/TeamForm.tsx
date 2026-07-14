@@ -132,7 +132,7 @@ export default function TeamForm({ data, setData, errors, processing, submitLabe
                     </label>
                     <div className="flex gap-2">
                         <button type="submit" disabled={processing}
-                            className="flex-1 bg-navy-950 hover:bg-navy-900 disabled:opacity-60 text-white text-sm font-semibold py-2.5 rounded-sm transition-colors">
+                            className="flex-1 bg-[#683030] hover:bg-[#572929] disabled:opacity-60 text-white text-sm font-semibold py-2.5 rounded-sm transition-colors">
                             {processing ? 'Saving…' : submitLabel}
                         </button>
                         <Link href={cancelHref} className="px-4 py-2.5 border border-gray-200 rounded-sm text-sm text-gray-500 hover:border-gray-300 transition-colors">
@@ -178,12 +178,12 @@ export default function TeamForm({ data, setData, errors, processing, submitLabe
                         <div className="flex border border-gray-200 rounded-sm overflow-hidden mb-3 text-xs font-medium">
                             <button type="button"
                                 onClick={() => { setPhotoMode('url'); setData('avatar_file', null); setFilePreview(null) }}
-                                className={`flex-1 py-2 transition-colors ${photoMode === 'url' ? 'bg-navy-950 text-white' : 'bg-gray-50 text-gray-500 hover:bg-gray-100'}`}>
+                                className={`flex-1 py-2 transition-colors ${photoMode === 'url' ? 'bg-[#683030] text-white' : 'bg-gray-50 text-gray-500 hover:bg-gray-100'}`}>
                                 Enter URL
                             </button>
                             <button type="button"
                                 onClick={() => { setPhotoMode('file'); setData('avatar_url', '') }}
-                                className={`flex-1 py-2 transition-colors ${photoMode === 'file' ? 'bg-navy-950 text-white' : 'bg-gray-50 text-gray-500 hover:bg-gray-100'}`}>
+                                className={`flex-1 py-2 transition-colors ${photoMode === 'file' ? 'bg-[#683030] text-white' : 'bg-gray-50 text-gray-500 hover:bg-gray-100'}`}>
                                 Upload File
                             </button>
                         </div>

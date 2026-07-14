@@ -2,8 +2,21 @@ import { Link, usePage } from '@inertiajs/react'
 import MainLayout from '@/Layouts/MainLayout'
 import Seo from '@/Components/Seo'
 
-interface Props {
+interface PracticeAreaPayload {
+    title: string
     slug: string
+    tagline: string | null
+    heroImg: string | null
+    intro: string | null
+    services: string[]
+    clientNeeds: { scenario: string; answer: string }[]
+    whyTrill: string | null
+    relatedAreas: { title: string; href: string }[]
+}
+
+interface Props {
+    slug?: string
+    area?: PracticeAreaPayload
 }
 
 const areaData: Record<string, {
@@ -186,15 +199,17 @@ const defaultArea = (slug: string) => ({
     ],
 })
 
-export default function PracticeArea({ slug }: Props) {
-    const area = areaData[slug] ?? defaultArea(slug)
+export default function PracticeArea({ slug, area: managedArea }: Props) {
+    const activeSlug = slug ?? managedArea?.slug ?? ''
+    const area = managedArea ?? areaData[activeSlug] ?? defaultArea(activeSlug)
+    const intro = area.intro ?? 'Trill & Associates Advocates provides focused legal services in this practice area, combining Tanzanian legal expertise with clear, practical advice.'
     const { appUrl, currentUrl } = usePage<{ appUrl: string; currentUrl: string }>().props
 
     const serviceSchema = {
         '@context':    'https://schema.org',
         '@type':       'Service',
         'name':        area.title,
-        'description': area.intro,
+        'description': intro,
         'url':         currentUrl,
         'provider': {
             '@type': 'LegalService',
@@ -218,23 +233,20 @@ export default function PracticeArea({ slug }: Props) {
         <MainLayout>
             <Seo
                 title={`${area.title} – Trill & Associates Advocates`}
-                description={area.intro.length > 160 ? area.intro.slice(0, 157) + '...' : area.intro}
-                image={area.heroImg}
+                description={intro.length > 160 ? intro.slice(0, 157) + '...' : intro}
+                image={area.heroImg ?? undefined}
                 jsonLd={faqSchema ? [serviceSchema, faqSchema] : serviceSchema}
             />
 
             {/* ── HERO ── */}
-            <section className="relative min-h-[60vh] flex items-end overflow-hidden">
+            <section className="relative min-h-[60vh] flex items-center overflow-hidden">
                 <img
-                    src={area.heroImg}
+                    src={area.heroImg || 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=1920&q=80'}
                     alt={area.title}
                     className="absolute inset-0 w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/75 to-navy-950/40" />
-                <div className="absolute inset-0 bg-navy-950/50" />
-                <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-transparent via-gold-500 to-transparent opacity-70" />
-
-                <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 pt-36 w-full">
+                <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(36,19,19,0.82)_0%,rgba(36,19,19,0.44)_46%,rgba(36,19,19,0.10)_76%),linear-gradient(to_top,rgba(104,48,48,0.88)_0%,rgba(104,48,48,0.36)_44%,transparent_78%)]" />
+                <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20 w-full">
                     <div className="max-w-3xl">
                         <div className="inline-flex items-center gap-2 text-sm mb-5">
                             <Link href="/" className="text-gray-400 hover:text-gold-400 transition-colors">Home</Link>
@@ -251,7 +263,7 @@ export default function PracticeArea({ slug }: Props) {
                             {area.title}
                         </h1>
                         <p className="text-gray-300 text-xl leading-relaxed max-w-2xl">
-                            {area.tagline}
+                            {area.tagline ?? 'Expert legal counsel tailored to your specific needs'}
                         </p>
                     </div>
                 </div>
@@ -269,7 +281,7 @@ export default function PracticeArea({ slug }: Props) {
                             <div>
                                 <h2 className="font-serif text-navy-950 text-3xl font-bold mb-2">Overview</h2>
                                 <span className="block w-12 h-0.5 bg-gold-500 mb-6" />
-                                <p className="text-gray-600 leading-relaxed text-lg">{area.intro}</p>
+                                <p className="text-gray-600 leading-relaxed text-lg">{intro}</p>
                             </div>
 
                             {/* Services */}
@@ -305,10 +317,10 @@ export default function PracticeArea({ slug }: Props) {
                             </div>
 
                             {/* Why Trill */}
-                            <div className="bg-navy-950 rounded-sm p-8">
+                            <div className="bg-[#683030] rounded-sm p-8">
                                 <p className="text-gold-400 text-xs tracking-[0.3em] uppercase font-medium mb-3">Why Choose Trill</p>
                                 <p className="text-white font-serif text-xl font-semibold leading-relaxed mb-0">
-                                    {area.whyTrill}
+                                    {area.whyTrill ?? 'Our team brings deep expertise, commercial awareness, and a genuine commitment to delivering outcomes for our clients.'}
                                 </p>
                             </div>
                         </div>
@@ -325,7 +337,7 @@ export default function PracticeArea({ slug }: Props) {
                                 <p className="text-navy-800 text-sm mb-5 leading-relaxed">
                                     Speak directly with a specialist in {area.title.split(' ')[0]} law today.
                                 </p>
-                                <Link href="/book-consultation" className="block w-full text-center bg-navy-950 hover:bg-navy-900 text-white font-semibold px-5 py-3 rounded-sm transition-colors text-sm uppercase tracking-wide">
+                                <Link href="/book-consultation" className="block w-full text-center bg-[#683030] hover:bg-[#572929] text-white font-semibold px-5 py-3 rounded-sm transition-colors text-sm uppercase tracking-wide">
                                     Schedule Now
                                 </Link>
                             </div>
@@ -335,7 +347,7 @@ export default function PracticeArea({ slug }: Props) {
                                 <h3 className="font-serif text-navy-950 text-lg font-semibold mb-4">Contact Us</h3>
                                 <div className="space-y-3">
                                     <a href="tel:+255718694863" className="flex items-center gap-3 text-gray-600 hover:text-gold-600 transition-colors group">
-                                        <div className="w-9 h-9 rounded-sm bg-navy-950 group-hover:bg-gold-500 flex items-center justify-center transition-colors flex-shrink-0">
+                                        <div className="w-9 h-9 rounded-sm bg-[#683030] group-hover:bg-gold-500 flex items-center justify-center transition-colors flex-shrink-0">
                                             <svg className="w-4 h-4 text-gold-400 group-hover:text-white" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                                             </svg>
@@ -343,7 +355,7 @@ export default function PracticeArea({ slug }: Props) {
                                         <span className="text-sm font-medium">+255 7１８ ６９４ ８６３</span>
                                     </a>
                                     <a href="mailto:info@trill.co.tz" className="flex items-center gap-3 text-gray-600 hover:text-gold-600 transition-colors group">
-                                        <div className="w-9 h-9 rounded-sm bg-navy-950 group-hover:bg-gold-500 flex items-center justify-center transition-colors flex-shrink-0">
+                                        <div className="w-9 h-9 rounded-sm bg-[#683030] group-hover:bg-gold-500 flex items-center justify-center transition-colors flex-shrink-0">
                                             <svg className="w-4 h-4 text-gold-400 group-hover:text-white" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                                             </svg>
@@ -377,21 +389,6 @@ export default function PracticeArea({ slug }: Props) {
                 </div>
             </section>
 
-            {/* ── CTA BANNER ── */}
-            <section className="py-16 bg-navy-950">
-                <div className="max-w-4xl mx-auto px-4 text-center">
-                    <h2 className="font-serif text-white text-3xl font-bold mb-4">
-                        Ready to Discuss Your <span className="text-gold-400">{area.title}</span> Matter?
-                    </h2>
-                    <p className="text-gray-400 text-base mb-8 max-w-xl mx-auto">
-                        Contact our team today to speak with a specialist advocate and get the legal support you need.
-                    </p>
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <Link href="/book-consultation" className="btn-primary">Book a Consultation</Link>
-                        <Link href="/contact" className="btn-outline">Send an Enquiry</Link>
-                    </div>
-                </div>
-            </section>
         </MainLayout>
     )
 }

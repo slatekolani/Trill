@@ -1,4 +1,4 @@
-import { Head, useForm } from '@inertiajs/react'
+import { Head, Link, useForm } from '@inertiajs/react'
 import { FormEventHandler } from 'react'
 
 export default function AdminLogin() {
@@ -17,13 +17,15 @@ export default function AdminLogin() {
         <>
             <Head title="Admin Login — Trill & Associates Advocates" />
 
-            <div className="min-h-screen bg-navy-950 flex items-center justify-center px-4">
+            <div className="min-h-screen bg-[#2f2526] flex items-center justify-center px-4">
                 <div className="w-full max-w-md">
 
                     {/* Logo */}
                     <div className="text-center mb-10">
-                        <img src="/Logo/trill_logo.png" alt="Trill & Associates Advocates" className="h-16 mx-auto mb-4 object-contain" />
-                        <p className="text-gray-400 text-sm">Admin Portal</p>
+                        <Link href="/" className="block bg-white border border-gold-100 px-6 py-5 rounded-sm shadow-xl mb-4 transition-shadow hover:shadow-2xl">
+                            <img src="/Logo/trill_logo.png" alt="Trill & Associates Advocates" className="h-16 w-full mx-auto object-contain" />
+                        </Link>
+                        <p className="text-gold-200 text-sm tracking-widest uppercase">Admin Portal</p>
                     </div>
 
                     {/* Card */}
@@ -78,7 +80,7 @@ export default function AdminLogin() {
                             <button
                                 type="submit"
                                 disabled={processing}
-                                className="w-full bg-navy-950 hover:bg-navy-900 disabled:opacity-60 text-white font-semibold py-3 rounded-sm transition-colors text-sm uppercase tracking-wide"
+                                className="w-full bg-[#683030] hover:bg-[#572929] disabled:opacity-60 text-white font-semibold py-3 rounded-sm transition-colors text-sm uppercase tracking-wide"
                             >
                                 {processing ? 'Signing in…' : 'Sign In'}
                             </button>

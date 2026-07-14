@@ -1,8 +1,9 @@
 import { Head, Link, router } from '@inertiajs/react'
 import AdminLayout from '@/Layouts/AdminLayout'
+import { confirmDelete } from '@/lib/confirm'
 
 interface Member {
-    id: number
+    id: string
     name: string
     role: string
     initials: string
@@ -14,8 +15,13 @@ interface Member {
 interface Props { members: Member[] }
 
 export default function TeamIndex({ members }: Props) {
-    const handleDelete = (id: number, name: string) => {
-        if (!confirm(`Remove "${name}" from the team? This cannot be undone.`)) return
+    const handleDelete = async (id: string, name: string) => {
+        const confirmed = await confirmDelete({
+            title: `Remove "${name}" from the team?`,
+            confirmButtonText: 'Yes, remove member',
+        })
+        if (!confirmed) return
+
         router.delete(`/admin/team/${id}`)
     }
 
@@ -58,7 +64,7 @@ export default function TeamIndex({ members }: Props) {
                                 <tr key={m.id} className="hover:bg-gray-50 transition-colors">
                                     <td className="px-5 py-4">
                                         <div className="flex items-center gap-3">
-                                            <div className="w-9 h-9 rounded-full bg-navy-950 flex items-center justify-center flex-shrink-0">
+                                            <div className="w-9 h-9 rounded-full bg-[#683030] flex items-center justify-center flex-shrink-0">
                                                 <span className="text-white font-serif font-bold text-xs">{m.initials}</span>
                                             </div>
                                             <div>

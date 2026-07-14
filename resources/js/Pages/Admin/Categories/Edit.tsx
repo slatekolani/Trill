@@ -3,7 +3,7 @@ import { FormEventHandler } from 'react'
 import AdminLayout from '@/Layouts/AdminLayout'
 
 interface Props {
-    category: { id: number; name: string; slug: string }
+    category: { id: string; name: string; slug: string }
 }
 
 export default function CategoryEdit({ category }: Props) {
@@ -27,7 +27,7 @@ export default function CategoryEdit({ category }: Props) {
                     </div>
                     <div className="flex gap-2">
                         <button type="submit" disabled={processing}
-                            className="bg-navy-950 hover:bg-navy-900 disabled:opacity-60 text-white text-sm font-semibold px-5 py-2.5 rounded-sm transition-colors">
+                            className="bg-[#683030] hover:bg-[#572929] disabled:opacity-60 text-white text-sm font-semibold px-5 py-2.5 rounded-sm transition-colors">
                             {processing ? 'Saving…' : 'Update Category'}
                         </button>
                         <Link href="/admin/categories" className="px-4 py-2.5 border border-gray-200 rounded-sm text-sm text-gray-500 hover:border-gray-300 transition-colors">

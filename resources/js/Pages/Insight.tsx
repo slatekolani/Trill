@@ -9,7 +9,7 @@ interface RelatedArticle {
 }
 
 interface Article {
-    id:          number
+    id:          string
     slug:        string
     title:       string
     category:    string
@@ -68,13 +68,10 @@ export default function Insight({ article }: Props) {
             />
 
             {/* ── HERO ── */}
-            <section className="relative min-h-[55vh] flex items-end overflow-hidden">
+            <section className="relative min-h-[55vh] flex items-center overflow-hidden">
                 <img src={article.hero_img ?? fallbackImg} alt={article.title} className="absolute inset-0 w-full h-full object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/70 to-navy-950/30" />
-                <div className="absolute inset-0 bg-navy-950/45" />
-                <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-transparent via-gold-500 to-transparent opacity-70" />
-
-                <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 pt-36 w-full">
+                <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(36,19,19,0.82)_0%,rgba(36,19,19,0.44)_46%,rgba(36,19,19,0.10)_76%),linear-gradient(to_top,rgba(104,48,48,0.88)_0%,rgba(104,48,48,0.36)_44%,transparent_78%)]" />
+                <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20 w-full">
                     <div className="max-w-3xl">
                         <div className="flex items-center gap-2 text-sm mb-5">
                             <Link href="/" className="text-gray-400 hover:text-gold-400 transition-colors">Home</Link>
@@ -121,7 +118,7 @@ export default function Insight({ article }: Props) {
                             </div>
 
                             {/* Author */}
-                            <div className="mt-10 p-6 bg-navy-950 rounded-sm flex items-center gap-5">
+                            <div className="mt-10 p-6 bg-[#683030] rounded-sm flex items-center gap-5">
                                 <div className="w-14 h-14 rounded-full bg-gold-500/20 border border-gold-500/40 flex items-center justify-center flex-shrink-0">
                                     <span className="font-serif text-white text-xl font-bold">T</span>
                                 </div>
@@ -142,7 +139,7 @@ export default function Insight({ article }: Props) {
                                 <p className="text-navy-800 text-sm mb-5 leading-relaxed">
                                     Have a question about this area of law? Speak with one of our specialist advocates.
                                 </p>
-                                <Link href="/book-consultation" className="block w-full text-center bg-navy-950 hover:bg-navy-900 text-white font-semibold px-5 py-3 rounded-sm transition-colors text-sm uppercase tracking-wide">
+                                <Link href="/book-consultation" className="block w-full text-center bg-[#683030] hover:bg-[#572929] text-white font-semibold px-5 py-3 rounded-sm transition-colors text-sm uppercase tracking-wide">
                                     Book a Consultation
                                 </Link>
                             </div>

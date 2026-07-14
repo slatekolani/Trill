@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Article;
 use App\Models\Category;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 
@@ -18,7 +17,7 @@ class ArticleController extends Controller
             ->latest()
             ->get()
             ->map(fn ($a) => [
-                'id'           => $a->id,
+                'id'           => $a->uuid,
                 'title'        => $a->title,
                 'slug'         => $a->slug,
                 'category'     => $a->category?->name,
@@ -33,7 +32,10 @@ class ArticleController extends Controller
 
     public function create()
     {
-        $categories = Category::orderBy('name')->get(['id', 'name']);
+        $categories = Category::orderBy('name')->get(['uuid', 'name'])->map(fn ($category) => [
+            'id' => $category->uuid,
+            'name' => $category->name,
+        ]);
         return Inertia::render('Admin/Articles/Create', compact('categories'));
     }
 
@@ -41,7 +43,7 @@ class ArticleController extends Controller
     {
         $request->validate([
             'title'        => ['required', 'string', 'max:255'],
-            'category_id'  => ['required', 'exists:categories,id'],
+            'category_id'  => ['required', 'exists:categories,uuid'],
             'author'       => ['required', 'string', 'max:255'],
             'author_role'  => ['nullable', 'string', 'max:255'],
             'excerpt'      => ['required', 'string'],
@@ -55,10 +57,12 @@ class ArticleController extends Controller
 
         $paragraphs = $this->parseParagraphs($request->input('content'));
 
+        $category = Category::where('uuid', $request->input('category_id'))->firstOrFail();
+
         Article::create([
             'title'        => $request->input('title'),
             'slug'         => Str::slug($request->input('title')),
-            'category_id'  => $request->input('category_id'),
+            'category_id'  => $category->id,
             'author'       => $request->input('author'),
             'author_role'  => $request->input('author_role'),
             'excerpt'      => $request->input('excerpt'),
@@ -76,14 +80,17 @@ class ArticleController extends Controller
 
     public function edit(Article $article)
     {
-        $categories = Category::orderBy('name')->get(['id', 'name']);
+        $categories = Category::orderBy('name')->get(['uuid', 'name'])->map(fn ($category) => [
+            'id' => $category->uuid,
+            'name' => $category->name,
+        ]);
 
         return Inertia::render('Admin/Articles/Edit', [
             'article'    => [
-                'id'           => $article->id,
+                'id'           => $article->uuid,
                 'title'        => $article->title,
                 'slug'         => $article->slug,
-                'category_id'  => $article->category_id,
+                'category_id'  => $article->category?->uuid,
                 'author'       => $article->author,
                 'author_role'  => $article->author_role,
                 'excerpt'      => $article->excerpt,
@@ -101,7 +108,7 @@ class ArticleController extends Controller
     {
         $request->validate([
             'title'        => ['required', 'string', 'max:255'],
-            'category_id'  => ['required', 'exists:categories,id'],
+            'category_id'  => ['required', 'exists:categories,uuid'],
             'author'       => ['required', 'string', 'max:255'],
             'author_role'  => ['nullable', 'string', 'max:255'],
             'excerpt'      => ['required', 'string'],
@@ -114,17 +121,18 @@ class ArticleController extends Controller
         ]);
 
         $paragraphs = $this->parseParagraphs($request->input('content'));
+        $category = Category::where('uuid', $request->input('category_id'))->firstOrFail();
 
-        // If a new file was uploaded, delete the old stored file
+        // If a new file was uploaded, delete the old locally stored file.
         $newHeroImg = $this->resolveHeroImg($request, $article->hero_img);
-        if ($request->hasFile('hero_file') && $article->hero_img && str_starts_with($article->hero_img, '/storage/')) {
-            Storage::delete(str_replace('/storage/', 'public/', $article->hero_img));
+        if ($request->hasFile('hero_file')) {
+            $this->deleteStoredImage($article->hero_img);
         }
 
         $article->update([
             'title'        => $request->input('title'),
             'slug'         => Str::slug($request->input('title')),
-            'category_id'  => $request->input('category_id'),
+            'category_id'  => $category->id,
             'author'       => $request->input('author'),
             'author_role'  => $request->input('author_role'),
             'excerpt'      => $request->input('excerpt'),
@@ -142,9 +150,7 @@ class ArticleController extends Controller
 
     public function destroy(Article $article)
     {
-        if ($article->hero_img && str_starts_with($article->hero_img, '/storage/')) {
-            Storage::delete(str_replace('/storage/', 'public/', $article->hero_img));
-        }
+        $this->deleteStoredImage($article->hero_img);
 
         $article->delete();
         return redirect()->route('admin.articles.index')->with('success', 'Article deleted.');
@@ -156,8 +162,7 @@ class ArticleController extends Controller
     private function resolveHeroImg(Request $request, ?string $existing = null): ?string
     {
         if ($request->hasFile('hero_file')) {
-            $path = $request->file('hero_file')->store('articles', 'public');
-            return '/storage/' . $path;
+            return $this->storePublicUpload($request, 'hero_file', 'articles');
         }
 
         $url = trim($request->input('hero_img', ''));
@@ -169,5 +174,41 @@ class ArticleController extends Controller
         return array_values(array_filter(
             array_map('trim', preg_split('/\n{2,}/', $content))
         ));
+    }
+
+    private function storePublicUpload(Request $request, string $field, string $folder): string
+    {
+        $file = $request->file($field);
+        $directory = public_path('uploads/' . $folder);
+
+        if (! is_dir($directory)) {
+            mkdir($directory, 0755, true);
+        }
+
+        $filename = Str::uuid() . '.' . $file->getClientOriginalExtension();
+        $file->move($directory, $filename);
+
+        return '/uploads/' . $folder . '/' . $filename;
+    }
+
+    private function deleteStoredImage(?string $url): void
+    {
+        if (! $url) {
+            return;
+        }
+
+        if (str_starts_with($url, '/uploads/')) {
+            $path = public_path(ltrim($url, '/'));
+            if (is_file($path)) {
+                unlink($path);
+            }
+        }
+
+        if (str_starts_with($url, '/storage/')) {
+            $path = storage_path('app/public/' . Str::after($url, '/storage/'));
+            if (is_file($path)) {
+                unlink($path);
+            }
+        }
     }
 }

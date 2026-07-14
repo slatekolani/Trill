@@ -14,7 +14,7 @@ class TeamController extends Controller
             ->orderBy('sort_order')
             ->get()
             ->map(fn ($m) => [
-                'id'             => $m->id,
+                'id'             => $m->uuid,
                 'name'           => $m->name,
                 'role'           => $m->role,
                 'bio'            => $m->bio,
@@ -36,7 +36,7 @@ class TeamController extends Controller
 
         return Inertia::render('TeamMember', [
             'member' => [
-                'id'             => $teamMember->id,
+                'id'             => $teamMember->uuid,
                 'name'           => $teamMember->name,
                 'role'           => $teamMember->role,
                 'bio'            => $teamMember->bio,

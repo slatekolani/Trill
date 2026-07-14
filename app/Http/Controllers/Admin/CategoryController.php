@@ -13,7 +13,7 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::withCount('articles')->orderBy('name')->get()->map(fn ($c) => [
-            'id'            => $c->id,
+            'id'            => $c->uuid,
             'name'          => $c->name,
             'slug'          => $c->slug,
             'articles_count'=> $c->articles_count,
@@ -45,7 +45,7 @@ class CategoryController extends Controller
     public function edit(Category $category)
     {
         return Inertia::render('Admin/Categories/Edit', [
-            'category' => ['id' => $category->id, 'name' => $category->name, 'slug' => $category->slug],
+            'category' => ['id' => $category->uuid, 'name' => $category->name, 'slug' => $category->slug],
         ]);
     }
 

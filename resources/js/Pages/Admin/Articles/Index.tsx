@@ -1,8 +1,9 @@
 import { Head, Link, router } from '@inertiajs/react'
 import AdminLayout from '@/Layouts/AdminLayout'
+import { confirmDelete } from '@/lib/confirm'
 
 interface Article {
-    id: number
+    id: string
     title: string
     slug: string
     category: string
@@ -17,8 +18,13 @@ interface Props {
 }
 
 export default function ArticlesIndex({ articles }: Props) {
-    const handleDelete = (id: number, title: string) => {
-        if (!confirm(`Delete "${title}"? This cannot be undone.`)) return
+    const handleDelete = async (id: string, title: string) => {
+        const confirmed = await confirmDelete({
+            title: `Delete "${title}"?`,
+            confirmButtonText: 'Yes, delete article',
+        })
+        if (!confirmed) return
+
         router.delete(`/admin/articles/${id}`)
     }
 

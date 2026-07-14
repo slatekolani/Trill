@@ -2,11 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasUuid;
 use Illuminate\Database\Eloquent\Model;
 
 class TeamMember extends Model
 {
+    use HasUuid;
+
     protected $fillable = [
+        'uuid',
         'name',
         'role',
         'bio',

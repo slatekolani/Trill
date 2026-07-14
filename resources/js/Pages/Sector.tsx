@@ -3,18 +3,22 @@ import MainLayout from '@/Layouts/MainLayout'
 import Seo from '@/Components/Seo'
 
 interface Props {
-    slug: string
+    slug?: string
+    sector?: SectorContent
 }
 
-const sectorData: Record<string, {
+interface SectorContent {
     title: string
     tagline: string
-    heroImg: string
-    intro: string
+    heroImg?: string | null
+    image_url?: string | null
+    intro?: string | null
     challenges: string[]
     services: string[]
     relevantAreas: { title: string; href: string }[]
-}> = {
+}
+
+const sectorData: Record<string, SectorContent> = {
     'energy-infrastructure': {
         title:   'Energy & Infrastructure',
         tagline: 'Legal support for Tanzania\'s energy sector and infrastructure projects',
@@ -101,15 +105,18 @@ const defaultSector = (slug: string) => ({
     ],
 })
 
-export default function Sector({ slug }: Props) {
-    const sector = sectorData[slug] ?? defaultSector(slug)
+export default function Sector({ slug, sector: managedSector }: Props) {
+    const lookupSlug = slug ?? managedSector?.title?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') ?? 'sector'
+    const sector = managedSector ?? sectorData[lookupSlug] ?? defaultSector(lookupSlug)
+    const heroImg = sector.heroImg ?? sector.image_url ?? 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=1920&q=80'
+    const intro = sector.intro ?? 'Trill & Associates Advocates provides specialist legal support to clients operating in this sector. Our team combines deep knowledge of Tanzanian law with commercial awareness of the specific challenges and regulatory requirements faced by businesses in this industry.'
     const { appUrl, currentUrl } = usePage<{ appUrl: string; currentUrl: string }>().props
 
     const sectorSchema = {
         '@context':    'https://schema.org',
         '@type':       'Service',
         'name':        `${sector.title} Legal Services`,
-        'description': sector.intro,
+        'description': intro,
         'url':         currentUrl,
         'provider': {
             '@type': 'LegalService',
@@ -123,24 +130,21 @@ export default function Sector({ slug }: Props) {
         <MainLayout>
             <Seo
                 title={`${sector.title} – Trill & Associates Advocates`}
-                description={sector.intro.length > 160 ? sector.intro.slice(0, 157) + '...' : sector.intro}
-                image={sector.heroImg}
+                description={intro.length > 160 ? intro.slice(0, 157) + '...' : intro}
+                image={heroImg}
                 jsonLd={sectorSchema}
             />
 
             {/* ── HERO ── */}
-            <section className="relative min-h-[60vh] flex items-end overflow-hidden">
-                <img src={sector.heroImg} alt={sector.title} className="absolute inset-0 w-full h-full object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/70 to-navy-950/30" />
-                <div className="absolute inset-0 bg-navy-950/50" />
-                <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-transparent via-gold-500 to-transparent opacity-70" />
-
-                <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 pt-36 w-full">
+            <section className="relative min-h-[60vh] flex items-center overflow-hidden">
+                <img src={heroImg} alt={sector.title} className="absolute inset-0 w-full h-full object-cover" />
+                <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(36,19,19,0.82)_0%,rgba(36,19,19,0.44)_46%,rgba(36,19,19,0.10)_76%),linear-gradient(to_top,rgba(104,48,48,0.88)_0%,rgba(104,48,48,0.36)_44%,transparent_78%)]" />
+                <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20 w-full">
                     <div className="max-w-3xl">
                         <div className="flex items-center gap-2 text-sm mb-5">
                             <Link href="/" className="text-gray-400 hover:text-gold-400 transition-colors">Home</Link>
                             <span className="text-gold-500">›</span>
-                            <Link href="/practice-areas#sectors" className="text-gray-400 hover:text-gold-400 transition-colors">Sectors</Link>
+                            <Link href="/sectors" className="text-gray-400 hover:text-gold-400 transition-colors">Sectors</Link>
                             <span className="text-gold-500">›</span>
                             <span className="text-gray-300">{sector.title}</span>
                         </div>
@@ -165,7 +169,7 @@ export default function Sector({ slug }: Props) {
                             <div>
                                 <h2 className="font-serif text-navy-950 text-3xl font-bold mb-2">Our Sector Expertise</h2>
                                 <span className="block w-12 h-0.5 bg-gold-500 mb-6" />
-                                <p className="text-gray-600 text-lg leading-relaxed">{sector.intro}</p>
+                                <p className="text-gray-600 text-lg leading-relaxed">{intro}</p>
                             </div>
 
                             <div>
@@ -202,7 +206,7 @@ export default function Sector({ slug }: Props) {
                                 <p className="text-navy-800 text-sm mb-5 leading-relaxed">
                                     Get legal advice tailored to the {sector.title} sector.
                                 </p>
-                                <Link href="/book-consultation" className="block w-full text-center bg-navy-950 hover:bg-navy-900 text-white font-semibold px-5 py-3 rounded-sm transition-colors text-sm uppercase tracking-wide">
+                                <Link href="/book-consultation" className="block w-full text-center bg-[#683030] hover:bg-[#572929] text-white font-semibold px-5 py-3 rounded-sm transition-colors text-sm uppercase tracking-wide">
                                     Book a Consultation
                                 </Link>
                             </div>
@@ -222,20 +226,6 @@ export default function Sector({ slug }: Props) {
                 </div>
             </section>
 
-            <section className="py-16 bg-navy-950">
-                <div className="max-w-4xl mx-auto px-4 text-center">
-                    <h2 className="font-serif text-white text-3xl font-bold mb-4">
-                        Operating in the <span className="text-gold-400">{sector.title}</span> sector?
-                    </h2>
-                    <p className="text-gray-400 text-base mb-8 max-w-xl mx-auto">
-                        Contact us to speak with an advocate who understands the commercial and regulatory context of your industry.
-                    </p>
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <Link href="/book-consultation" className="btn-primary">Book a Consultation</Link>
-                        <Link href="/contact" className="btn-outline">Send an Enquiry</Link>
-                    </div>
-                </div>
-            </section>
         </MainLayout>
     )
 }

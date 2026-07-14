@@ -1,4 +1,4 @@
-import { Link } from '@inertiajs/react'
+import { Link, usePage } from '@inertiajs/react'
 
 const practiceAreaLinks = [
     { label: 'Corporate & Commercial Law',    href: '/practice-areas/corporate-commercial' },
@@ -14,27 +14,37 @@ const practiceAreaLinks = [
 ]
 
 export default function Footer() {
+    const { contentBlocks = {}, navPracticeAreas = [] } = usePage<{
+        contentBlocks?: Record<string, string>
+        navPracticeAreas?: { label: string; href: string }[]
+    }>().props
+    const practiceLinks = navPracticeAreas.length ? navPracticeAreas.slice(0, 10) : practiceAreaLinks
+    const phone = contentBlocks.site_phone ?? '+255 718 694 863'
+    const phoneHref = `tel:${phone.replace(/[^\d+]/g, '')}`
+    const email = contentBlocks.site_email ?? 'info@trill.co.tz'
+    const addressLines = (contentBlocks.site_address ?? '18th Floor, Rita Tower\nMkunyanga - Simu Street\nP.O. Box 5823\nDar-es-Salaam, Tanzania').split('\n')
+
     return (
-        <footer className="bg-navy-950 text-gray-300">
+        <footer className="bg-white text-gray-700 border-t border-gold-200">
             {/* Top accent */}
-            <div className="h-1 bg-gradient-to-r from-gold-600 via-gold-400 to-gold-600" />
+            <div className="h-px bg-gold-500" />
 
             {/* Pre-footer CTA strip */}
-            <div className="border-b border-white/10">
+            <div className="border-b border-gold-100 bg-gold-50">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
                     <div className="flex flex-col md:flex-row items-center justify-between gap-6">
                         <div>
-                            <h3 className="font-serif text-white text-2xl font-bold mb-1">
-                                Ready to Work with Us?
+                            <h3 className="font-serif text-navy-950 text-2xl font-semibold mb-1">
+                                {contentBlocks.footer_cta_title ?? 'Ready to Work with Us?'}
                             </h3>
-                            <p className="text-gray-400 text-sm">
-                                Our specialist advocates are ready to help. Get in touch today.
+                            <p className="text-gray-600 text-sm">
+                                {contentBlocks.footer_cta_text ?? 'Our specialist advocates are ready to help. Get in touch today.'}
                             </p>
                         </div>
                         <div className="flex flex-col sm:flex-row gap-3 flex-shrink-0">
                             <Link
                                 href="/book-consultation"
-                                className="inline-flex items-center gap-2 bg-gold-500 hover:bg-gold-600 text-white font-semibold px-6 py-3 rounded-sm transition-colors text-sm uppercase tracking-wide"
+                                className="inline-flex items-center gap-2 bg-[#683030] hover:bg-[#572929] text-white font-semibold px-6 py-3 rounded-sm transition-colors text-sm uppercase tracking-wide"
                             >
                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
@@ -42,13 +52,13 @@ export default function Footer() {
                                 Book a Consultation
                             </Link>
                             <a
-                                href="tel:+255718694863"
-                                className="inline-flex items-center gap-2 border border-white/20 hover:border-gold-400 text-gray-300 hover:text-gold-400 font-medium px-6 py-3 rounded-sm transition-colors text-sm"
+                                href={phoneHref}
+                                className="inline-flex items-center gap-2 border border-[#683030] text-[#572929] hover:bg-white font-medium px-6 py-3 rounded-sm transition-colors text-sm"
                             >
                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                                 </svg>
-                                +255 718 694 863
+                                {phone}
                             </a>
                         </div>
                     </div>
@@ -68,28 +78,26 @@ export default function Footer() {
                                 className="h-20 w-auto object-contain"
                             />
                         </div>
-                        <p className="text-sm leading-relaxed text-gray-400 mb-3">
-                            A modern Tanzanian law firm providing strategic, practical, and commercially sound
-                            legal solutions to businesses, institutions, investors, and private clients.
+                        <p className="text-sm leading-relaxed text-gray-600 mb-3">
+                            {contentBlocks.footer_about ?? 'A modern Tanzanian law firm providing strategic, practical, and commercially sound legal solutions to businesses, institutions, investors, and private clients.'}
                         </p>
                         <p className="text-xs text-gray-500 mb-6">
-                            Licensed Notaries Public &amp; Commissioners for Oath.<br />
-                            Members of the Tanganyika Law Society.
+                            {contentBlocks.footer_license ?? 'Licensed Notaries Public & Commissioners for Oath. Members of the Tanganyika Law Society.'}
                         </p>
                         {/* Social */}
                         <div className="flex gap-3">
                             <a href="https://facebook.com/trilladvocates" target="_blank" rel="noopener noreferrer"
-                                className="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center hover:border-gold-400 hover:text-gold-400 transition-colors duration-300"
+                                className="w-9 h-9 rounded-sm border border-gold-300 text-[#572929] flex items-center justify-center hover:border-[#683030] hover:bg-white transition-colors duration-300"
                                 aria-label="Facebook">
                                 <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
                             </a>
                             <a href="https://twitter.com/trilladvocates" target="_blank" rel="noopener noreferrer"
-                                className="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center hover:border-gold-400 hover:text-gold-400 transition-colors duration-300"
+                                className="w-9 h-9 rounded-sm border border-gold-300 text-[#572929] flex items-center justify-center hover:border-[#683030] hover:bg-white transition-colors duration-300"
                                 aria-label="X / Twitter">
                                 <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 1200 1227"><path d="M714.163 519.284 1160.89 0h-105.86L667.137 450.887 357.328 0H0l468.492 681.821L0 1226.37h105.866l409.625-476.152 327.181 476.152H1200L714.137 519.284h.026ZM569.165 687.828l-47.468-67.894-377.686-540.24h162.604l304.797 435.991 47.468 67.894 396.2 566.721H892.476L569.165 687.854v-.026Z"/></svg>
                             </a>
                             <a href="https://linkedin.com/company/trilladvocates" target="_blank" rel="noopener noreferrer"
-                                className="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center hover:border-gold-400 hover:text-gold-400 transition-colors duration-300"
+                                className="w-9 h-9 rounded-sm border border-gold-300 text-[#572929] flex items-center justify-center hover:border-[#683030] hover:bg-white transition-colors duration-300"
                                 aria-label="LinkedIn">
                                 <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
                             </a>
@@ -98,7 +106,7 @@ export default function Footer() {
 
                     {/* Quick Links */}
                     <div>
-                        <h4 className="text-white font-serif text-base font-semibold mb-5 pb-2 border-b border-white/10">
+                        <h4 className="text-navy-950 font-serif text-base font-semibold mb-5 pb-2 border-b border-gold-200">
                             Quick Links
                         </h4>
                         <ul className="space-y-2.5">
@@ -112,7 +120,7 @@ export default function Footer() {
                                 { label: 'Book a Consultation', href: '/book-consultation' },
                             ].map(link => (
                                 <li key={link.href}>
-                                    <Link href={link.href} className="text-sm text-gray-400 hover:text-gold-400 transition-colors duration-300 flex items-center gap-2">
+                                    <Link href={link.href} className="text-sm text-gray-600 hover:text-[#683030] transition-colors duration-300 flex items-center gap-2">
                                         <span className="text-gold-500">›</span> {link.label}
                                     </Link>
                                 </li>
@@ -122,19 +130,19 @@ export default function Footer() {
 
                     {/* Practice Areas */}
                     <div>
-                        <h4 className="text-white font-serif text-base font-semibold mb-5 pb-2 border-b border-white/10">
+                        <h4 className="text-navy-950 font-serif text-base font-semibold mb-5 pb-2 border-b border-gold-200">
                             Practice Areas
                         </h4>
                         <ul className="space-y-2">
-                            {practiceAreaLinks.map(area => (
+                            {practiceLinks.map(area => (
                                 <li key={area.href}>
-                                    <Link href={area.href} className="text-sm text-gray-400 hover:text-gold-400 transition-colors duration-300 flex items-start gap-2">
+                                    <Link href={area.href} className="text-sm text-gray-600 hover:text-[#683030] transition-colors duration-300 flex items-start gap-2">
                                         <span className="text-gold-500 mt-0.5">›</span> {area.label}
                                     </Link>
                                 </li>
                             ))}
                             <li>
-                                <Link href="/practice-areas" className="text-xs text-gold-500 hover:text-gold-400 transition-colors mt-1 block">
+                                <Link href="/practice-areas" className="text-xs text-navy-600 hover:text-navy-800 transition-colors mt-1 block">
                                     View All 17 Areas →
                                 </Link>
                             </li>
@@ -143,7 +151,7 @@ export default function Footer() {
 
                     {/* Contact */}
                     <div>
-                        <h4 className="text-white font-serif text-base font-semibold mb-5 pb-2 border-b border-white/10">
+                        <h4 className="text-navy-950 font-serif text-base font-semibold mb-5 pb-2 border-b border-gold-200">
                             Contact
                         </h4>
                         <ul className="space-y-4">
@@ -151,36 +159,32 @@ export default function Footer() {
                                 <svg className="w-4 h-4 text-gold-400 mt-1 shrink-0" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                                 </svg>
-                                <span className="text-sm text-gray-400 leading-relaxed">
-                                    18th Floor, Rita Tower<br />
-                                    Mkunyanga – Simu Street<br />
-                                    P.O. Box 5823<br />
-                                    Dar-es-Salaam, Tanzania
+                                <span className="text-sm text-gray-600 leading-relaxed">
+                                    {addressLines.map((line) => <span key={line}>{line}<br /></span>)}
                                 </span>
                             </li>
                             <li className="flex items-center gap-3">
                                 <svg className="w-4 h-4 text-gold-400 shrink-0" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
                                 </svg>
-                                <a href="tel:+255718694863" className="text-sm text-gray-400 hover:text-gold-400 transition-colors">
-                                    +255 718 694 863
+                                <a href={phoneHref} className="text-sm text-gray-600 hover:text-[#683030] transition-colors">
+                                    {phone}
                                 </a>
                             </li>
                             <li className="flex items-center gap-3">
                                 <svg className="w-4 h-4 text-gold-400 shrink-0" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                                 </svg>
-                                <a href="mailto:info@trill.co.tz" className="text-sm text-gray-400 hover:text-gold-400 transition-colors">
-                                    info@trill.co.tz
+                                <a href={`mailto:${email}`} className="text-sm text-gray-600 hover:text-[#683030] transition-colors">
+                                    {email}
                                 </a>
                             </li>
                             <li className="flex items-start gap-3">
                                 <svg className="w-4 h-4 text-gold-400 mt-0.5 shrink-0" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                 </svg>
-                                <span className="text-sm text-gray-400 leading-relaxed">
-                                    Mon – Fri: 8:00 AM – 5:00 PM<br />
-                                    Sat: 9:00 AM – 1:00 PM
+                                <span className="text-sm text-gray-600 leading-relaxed">
+                                    {(contentBlocks.site_hours ?? 'Mon - Fri: 8:00 AM - 5:00 PM\nSat: 9:00 AM - 1:00 PM').split('\n').map((line) => <span key={line}>{line}<br /></span>)}
                                 </span>
                             </li>
                         </ul>
@@ -188,14 +192,14 @@ export default function Footer() {
                 </div>
 
                 {/* Bottom bar */}
-                <div className="border-t border-white/10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div className="border-t border-gold-200 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
                     <p className="text-xs text-gray-500">
                         &copy; {new Date().getFullYear()} Trill &amp; Associates Advocates. All Rights Reserved.
                     </p>
                     <div className="flex items-center gap-4 text-xs text-gray-600">
-                        <Link href="/about" className="hover:text-gold-400 transition-colors">About</Link>
-                        <Link href="/contact" className="hover:text-gold-400 transition-colors">Contact</Link>
-                        <Link href="/insights" className="hover:text-gold-400 transition-colors">Legal Insights</Link>
+                        <Link href="/about" className="hover:text-[#683030] transition-colors">About</Link>
+                        <Link href="/contact" className="hover:text-[#683030] transition-colors">Contact</Link>
+                        <Link href="/insights" className="hover:text-[#683030] transition-colors">Legal Insights</Link>
                     </div>
                 </div>
                 <div className="pt-4 text-center">
@@ -205,7 +209,7 @@ export default function Footer() {
                             href="https://nextbyte.co.tz/"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-gray-500 hover:text-gold-400 transition-colors"
+                            className="text-gray-500 hover:text-[#683030] transition-colors"
                         >
                             NextByte ICT Solutions
                         </a>

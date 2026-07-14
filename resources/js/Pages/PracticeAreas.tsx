@@ -1,6 +1,8 @@
 import { Link } from '@inertiajs/react'
 import MainLayout from '@/Layouts/MainLayout'
 import Seo from '@/Components/Seo'
+import PageHero from '@/Components/PageHero'
+import { block } from '@/lib/content'
 
 const practiceAreas = [
     {
@@ -226,7 +228,21 @@ const sectors = [
     },
 ]
 
-export default function PracticeAreas() {
+interface ManagedPracticeArea {
+    id: string
+    title: string
+    desc: string | null
+    summary?: string | null
+    href: string
+    image_url?: string | null
+    img?: string | null
+}
+
+export default function PracticeAreas({ practiceAreas: managedPracticeAreas = [], contentBlocks = {} }: { practiceAreas?: ManagedPracticeArea[], contentBlocks?: Record<string, string> }) {
+    const displayedPracticeAreas = managedPracticeAreas.length
+        ? managedPracticeAreas.map(area => ({ ...area, desc: area.desc ?? area.summary ?? '', img: area.image_url ?? area.img ?? null, icon: null }))
+        : practiceAreas.map(area => ({ ...area, img: null }))
+
     return (
         <MainLayout>
             <Seo
@@ -234,155 +250,69 @@ export default function PracticeAreas() {
                 description="Explore the full range of legal services at Trill & Associates Advocates — corporate law, dispute resolution, real estate, intellectual property, employment law, and more in Tanzania."
             />
 
-            {/* ── PAGE HERO ── */}
-            <section className="relative min-h-[60vh] flex items-center overflow-hidden">
-                <img
-                    src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=1920&q=80"
-                    alt="Legal practice"
-                    className="absolute inset-0 w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-r from-navy-950/97 via-navy-950/85 to-navy-900/60" />
-                <div className="absolute inset-0 bg-navy-950/50" />
-                <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-transparent via-gold-500 to-transparent opacity-70" />
-
-                <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20 w-full">
-                    <div className="max-w-3xl">
-                        <div className="inline-flex items-center gap-3 mb-6">
-                            <span className="h-px w-12 bg-gold-400" />
-                            <span className="text-gold-400 text-xs tracking-[0.4em] uppercase font-medium">What We Do</span>
-                        </div>
-                        <h1 className="font-serif text-white text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6">
-                            Practice Areas &amp;<br />
-                            <span className="text-gold-400 italic">Sectors Served</span>
-                        </h1>
-                        <p className="text-gray-300 text-xl leading-relaxed max-w-2xl mb-10">
-                            17 specialised practice areas and 8 industry sectors — comprehensive legal expertise
-                            covering every aspect of Tanzanian and international law.
-                        </p>
-                        <div className="flex items-center gap-2 text-sm">
-                            <Link href="/" className="text-gray-400 hover:text-gold-400 transition-colors">Home</Link>
-                            <span className="text-gold-500">›</span>
-                            <span className="text-gray-300">Practice Areas</span>
-                        </div>
-                    </div>
-                </div>
-            </section>
+            <PageHero
+                eyebrow={block(contentBlocks, 'practice_hero_eyebrow', 'What We Do')}
+                title={block(contentBlocks, 'practice_hero_heading', 'Practice Areas &')}
+                accent={block(contentBlocks, 'practice_hero_subheading', 'Sectors Served')}
+                description={block(contentBlocks, 'practice_hero_text', '17 specialised practice areas and 8 industry sectors, with comprehensive legal expertise covering every aspect of Tanzanian and international law.')}
+                image="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=1920&q=80"
+                imageAlt="Legal practice"
+                current={block(contentBlocks, 'practice_breadcrumb', 'Practice Areas')}
+            />
 
             {/* ── PRACTICE AREAS GRID ── */}
             <section className="py-24 bg-white" id="practice-areas">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="text-center mb-16">
-                        <p className="text-gold-600 text-sm tracking-[0.3em] uppercase font-medium mb-4">Our Expertise</p>
-                        <h2 className="section-title">
-                            17 Practice Areas
-                        </h2>
-                        <span className="block w-16 h-1 bg-gold-500 mx-auto mt-4 mb-6" />
-                        <p className="text-gray-500 max-w-2xl mx-auto text-lg">
-                            From corporate governance to human rights, our practice covers the full spectrum of
-                            legal needs for businesses, institutions, and individuals in Tanzania.
+                    <div className="mb-16 grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
+                        <div>
+                            <p className="text-gold-600 text-sm tracking-[0.3em] uppercase font-medium mb-4">{block(contentBlocks, 'practice_grid_eyebrow', 'Our Expertise')}</p>
+                            <h2 className="section-title">
+                                {block(contentBlocks, 'practice_grid_heading', 'Practice Areas')}
+                            </h2>
+                            <span className="signature-rule mt-5 block" />
+                        </div>
+                        <p className="max-w-3xl text-lg leading-8 text-gray-500 lg:justify-self-end">
+                            {block(contentBlocks, 'practice_grid_text', 'From corporate governance to human rights, our practice covers the full spectrum of legal needs for businesses, institutions, and individuals in Tanzania.')}
                         </p>
                     </div>
 
-                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {practiceAreas.map((area) => (
+                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-0 border-l border-t border-gold-200">
+                        {displayedPracticeAreas.map((area) => (
                             <Link
                                 key={area.title}
                                 href={area.href}
-                                className="group bg-white border border-gray-100 rounded-sm p-7 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col relative overflow-hidden"
+                                className="group relative flex min-h-[360px] flex-col overflow-hidden border-b border-r border-gold-200 bg-white transition-all duration-300 hover:bg-gold-50"
                             >
-                                {/* Bottom accent line */}
-                                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
-
-                                <div className="w-12 h-12 rounded-sm bg-navy-950 text-gold-400 flex items-center justify-center mb-5 p-2.5 group-hover:bg-gold-500 group-hover:text-white transition-colors duration-300 flex-shrink-0">
-                                    {area.icon}
+                                <div className="relative h-40 overflow-hidden bg-[#683030]">
+                                    {area.img ? (
+                                        <img src={area.img} alt={area.title} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                                    ) : (
+                                        <div className="w-full h-full flex items-center justify-center text-gold-400">
+                                            {area.icon}
+                                        </div>
+                                    )}
+                                    <div className="absolute inset-0 bg-[#683030]/18" />
                                 </div>
-                                <h3 className="font-serif text-navy-950 text-lg font-semibold mb-3 leading-snug group-hover:text-gold-700 transition-colors duration-300">
-                                    {area.title}
-                                </h3>
-                                <p className="text-gray-500 text-sm leading-relaxed flex-1 mb-5">
-                                    {area.desc}
-                                </p>
-                                <span className="text-gold-600 text-xs font-medium tracking-wider uppercase flex items-center gap-1.5 group-hover:gap-2.5 transition-all duration-300 mt-auto">
-                                    Learn More
-                                    <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                                    </svg>
-                                </span>
-                            </Link>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* ── DIVIDER ── */}
-            <div className="h-1 bg-gradient-to-r from-transparent via-gold-500 to-transparent opacity-30" />
-
-            {/* ── SECTORS SECTION ── */}
-            <section className="py-24 bg-gray-50" id="sectors">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="text-center mb-16">
-                        <p className="text-gold-600 text-sm tracking-[0.3em] uppercase font-medium mb-4">Industry Focus</p>
-                        <h2 className="section-title">
-                            Sectors &amp; Industries
-                        </h2>
-                        <span className="block w-16 h-1 bg-gold-500 mx-auto mt-4 mb-6" />
-                        <p className="text-gray-500 max-w-2xl mx-auto text-lg">
-                            Our sector-based approach means we understand not just the law, but the commercial
-                            context and unique regulatory landscape of the industries you operate in.
-                        </p>
-                    </div>
-
-                    <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {sectors.map((sector) => (
-                            <Link
-                                key={sector.title}
-                                href={sector.href}
-                                className="group relative rounded-sm overflow-hidden bg-navy-950 hover:shadow-2xl transition-all duration-300"
-                            >
-                                <div className="absolute inset-0">
-                                    <img src={sector.img} alt={sector.title} className="w-full h-full object-cover opacity-25 group-hover:opacity-35 transition-opacity duration-300" />
-                                </div>
-                                <div className="relative z-10 p-6 h-full flex flex-col min-h-48">
-                                    <div className="flex-1">
-                                        <h3 className="font-serif text-white text-lg font-semibold mb-2 leading-snug group-hover:text-gold-300 transition-colors duration-300">
-                                            {sector.title}
-                                        </h3>
-                                        <p className="text-gray-400 text-sm leading-relaxed">
-                                            {sector.desc}
-                                        </p>
-                                    </div>
-                                    <span className="text-gold-400 text-xs font-medium tracking-wider uppercase flex items-center gap-1 mt-5 group-hover:gap-2 transition-all duration-300">
-                                        Explore
+                                <div className="p-7 flex flex-col flex-1">
+                                    <h3 className="font-serif text-navy-950 text-lg font-semibold mb-3 leading-snug group-hover:text-gold-700 transition-colors duration-300">
+                                        {area.title}
+                                    </h3>
+                                    <p className="text-gray-500 text-sm leading-relaxed flex-1 mb-5">
+                                        {area.desc}
+                                    </p>
+                                    <span className="text-gold-600 text-xs font-medium tracking-wider uppercase flex items-center gap-1.5 group-hover:gap-2.5 transition-all duration-300 mt-auto">
+                                        {block(contentBlocks, 'practice_card_link_label', 'Learn More')}
                                         <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                                         </svg>
                                     </span>
                                 </div>
-                                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
                             </Link>
                         ))}
                     </div>
                 </div>
             </section>
 
-            {/* ── CTA ── */}
-            <section className="py-20 bg-navy-950 relative overflow-hidden">
-                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-gold-600 via-gold-400 to-gold-600" />
-                <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
-                    <p className="text-gold-400 text-sm tracking-[0.3em] uppercase font-medium mb-4">Get Started</p>
-                    <h2 className="font-serif text-white text-4xl md:text-5xl font-bold mb-5">
-                        Not Sure Which Service<br />
-                        <span className="text-gold-400 italic">You Need?</span>
-                    </h2>
-                    <p className="text-gray-400 text-lg mb-10 max-w-2xl mx-auto">
-                        Contact our team and we will connect you with the right specialist for your specific legal matter — at no obligation.
-                    </p>
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <Link href="/book-consultation" className="btn-primary">Book a Free Consultation</Link>
-                        <a href="tel:+255718694863" className="btn-outline">Call: +255 718 694 863</a>
-                    </div>
-                </div>
-            </section>
         </MainLayout>
     )
 }

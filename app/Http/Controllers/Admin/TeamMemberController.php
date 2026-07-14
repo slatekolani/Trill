@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\TeamMember;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class TeamMemberController extends Controller
@@ -13,7 +13,7 @@ class TeamMemberController extends Controller
     public function index()
     {
         $members = TeamMember::orderBy('sort_order')->get()->map(fn ($m) => [
-            'id'         => $m->id,
+            'id'         => $m->uuid,
             'name'       => $m->name,
             'role'       => $m->role,
             'initials'   => $m->initials,
@@ -71,7 +71,7 @@ class TeamMemberController extends Controller
     {
         return Inertia::render('Admin/Team/Edit', [
             'member' => [
-                'id'             => $teamMember->id,
+                'id'             => $teamMember->uuid,
                 'name'           => $teamMember->name,
                 'role'           => $teamMember->role,
                 'bio'            => $teamMember->bio,
@@ -106,11 +106,10 @@ class TeamMemberController extends Controller
             'is_active'      => ['boolean'],
         ]);
 
-        // If a new file was uploaded, delete the old stored file
+        // If a new file was uploaded, delete the old locally stored file.
         $newAvatar = $this->resolveAvatar($request, $teamMember->avatar_url);
-        if ($request->hasFile('avatar_file') && $teamMember->avatar_url && str_starts_with($teamMember->avatar_url, '/storage/')) {
-            $oldPath = str_replace('/storage/', 'public/', $teamMember->avatar_url);
-            Storage::delete($oldPath);
+        if ($request->hasFile('avatar_file')) {
+            $this->deleteStoredImage($teamMember->avatar_url);
         }
 
         $teamMember->update([
@@ -134,11 +133,7 @@ class TeamMemberController extends Controller
 
     public function destroy(TeamMember $teamMember)
     {
-        // Clean up stored file if applicable
-        if ($teamMember->avatar_url && str_starts_with($teamMember->avatar_url, '/storage/')) {
-            $path = str_replace('/storage/', 'public/', $teamMember->avatar_url);
-            Storage::delete($path);
-        }
+        $this->deleteStoredImage($teamMember->avatar_url);
 
         $teamMember->delete();
         return redirect()->route('admin.team.index')->with('success', 'Team member removed.');
@@ -150,8 +145,7 @@ class TeamMemberController extends Controller
     private function resolveAvatar(Request $request, ?string $existing = null): ?string
     {
         if ($request->hasFile('avatar_file')) {
-            $path = $request->file('avatar_file')->store('avatars', 'public');
-            return '/storage/' . $path;
+            return $this->storePublicUpload($request, 'avatar_file', 'avatars');
         }
 
         $url = trim($request->input('avatar_url', ''));
@@ -177,5 +171,41 @@ class TeamMemberController extends Controller
             fn ($e) => ($e['degree'] ?? '') . ' | ' . ($e['institution'] ?? ''),
             $edu
         ));
+    }
+
+    private function storePublicUpload(Request $request, string $field, string $folder): string
+    {
+        $file = $request->file($field);
+        $directory = public_path('uploads/' . $folder);
+
+        if (! is_dir($directory)) {
+            mkdir($directory, 0755, true);
+        }
+
+        $filename = Str::uuid() . '.' . $file->getClientOriginalExtension();
+        $file->move($directory, $filename);
+
+        return '/uploads/' . $folder . '/' . $filename;
+    }
+
+    private function deleteStoredImage(?string $url): void
+    {
+        if (! $url) {
+            return;
+        }
+
+        if (str_starts_with($url, '/uploads/')) {
+            $path = public_path(ltrim($url, '/'));
+            if (is_file($path)) {
+                unlink($path);
+            }
+        }
+
+        if (str_starts_with($url, '/storage/')) {
+            $path = storage_path('app/public/' . Str::after($url, '/storage/'));
+            if (is_file($path)) {
+                unlink($path);
+            }
+        }
     }
 }
